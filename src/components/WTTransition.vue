@@ -63,7 +63,7 @@ function onLeave (el, done) {
 .expand-enter-active,
 .expand-leave-active {
   transition: height 0.3s ease-in-out;
-  /* overflow: hidden; */
+  overflow: hidden;
 }
 .expand-enter,
 .expand-leave-to {
