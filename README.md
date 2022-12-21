@@ -20,7 +20,7 @@
 
 **登录页 Login Page**
 
-![Exercises Page Home Page Login Page](.\assets\Exercises Page Home Page Login Page.jpeg)
+![Exercises Page Home Page Login Page](https://github.com/chenfei2009/workout-tracker/blob/main/assets/Exercises%20Page%20Home%20Page%20Login%20Page.jpeg)
 
 **训练列表页 Workouts Page**
 
@@ -28,7 +28,7 @@
 
 **训练页 Running Workout Page**
 
-![Workouts Page Running Page](.\assets\Workouts Page Running Page.jpeg)
+![Workouts Page Running Page](https://github.com/chenfei2009/workout-tracker/blob/main/assets/Workouts%20Page%20Running%20Page.jpeg)
 
 
 
