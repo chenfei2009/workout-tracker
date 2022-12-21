@@ -237,7 +237,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, onMounted, reactive, ref, toRef } from 'vue'
+import { defineProps, defineEmits, onMounted, reactive, ref } from 'vue'
 import router from '@/router'
 
 import WTTransition from '@/components/WTTransition.vue'
@@ -276,22 +276,17 @@ const typeOptions = ref([
 ])
 
 const setOptions = arr => arr.map(x => { return { value: x, isSelected: false } })
-const areaOptions = toRef(setOptions(AREAS))
-const muscleOptions = toRef(setOptions(MUSCLES))
+// const areaOptions = toRef(setOptions(AREAS))
+const areaOptions = ref(setOptions(AREAS))
+// const muscleOptions = toRef(setOptions(MUSCLES))
+const muscleOptions = ref(setOptions(MUSCLES))
 
-function showDrawer (target) {
+const showDrawer = target => {
   title.value = target
   visible.value = true
 }
 
-function onClose () {
-  visible.value = false
-}
-
-function changeType (value) {
-  onClose()
-  dto.type = value
-}
+const onClose = () => (visible.value = false)
 
 // 表单内容
 const dto = reactive({
@@ -307,6 +302,11 @@ const dto = reactive({
   reps: {} // min: 1, max: 8
 })
 
+const changeType = value => {
+  onClose()
+  dto.type = value
+}
+
 const desc = ref(['初级', '中级', '高级'])
 
 // const muscles = computed(() => VariableManagement.getMuscleNames())
@@ -317,6 +317,7 @@ onMounted(() => {
   if (props.exercise) {
     const ex = props.exercise
 
+    // console.log(areaOptions.value)
     areaOptions.value.forEach(x => {
       if (props.exercise.areas.includes(x.value)) x.isSelected = true
     })
