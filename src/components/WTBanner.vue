@@ -43,7 +43,7 @@ function clicked (e) {
 <style lang="less" scoped>
 .wt-banner {
   position: relative;
-  height: fit-content;
+  // height: fit-content;
   cursor: pointer;
 
   @media only screen and(max-width: 599px) {

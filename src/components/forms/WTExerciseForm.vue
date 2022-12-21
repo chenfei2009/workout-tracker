@@ -85,7 +85,7 @@
 
       <!-- 目标容量 表单 -->
       <WTTransition>
-        <div v-if="props.activeKey === 2">
+        <div class="form" v-if="props.activeKey === 2">
           <div sub style="opacity: .5">
             填写目标组数、时长或距离，作为提示信息
           </div>
@@ -147,7 +147,7 @@
 
       <!-- 更多信息 表单 -->
       <WTTransition>
-        <div v-if="props.activeKey === 3">
+        <div class="form" v-if="props.activeKey === 3">
           指导视频
           <a-input v-model="dto.explanatoryVideo"/>
 
@@ -486,6 +486,7 @@ function handleCatch (err) {
   }
 
   .form {
+    background-color: @background;
     input {
       padding: 20px 15px;
       border: 0;

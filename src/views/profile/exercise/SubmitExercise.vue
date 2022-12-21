@@ -28,7 +28,7 @@ function handleTabClick (value) {
 <style lang="less" scoped>
 .view-submit-exercise {
   [content] {
-    margin-top: 120px;
+    margin-top: 80px;
   }
 }
 </style>
