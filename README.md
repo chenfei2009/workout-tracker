@@ -12,7 +12,7 @@
 
 **发现页 Discover Page**
 
-![Discover Page](/assets/Discover Page.jpeg)
+![Discover Page](https://github.com/chenfei2009/workout-tracker/blob/main/assets/Discover%20Page.jpeg)
 
 **动作页 Exercises Page**
 
