@@ -12,7 +12,7 @@
 
 **发现页 Discover Page**
 
-![Discover Page](.\assets\Discover Page.jpeg)
+![Discover Page](\assets\Discover Page.jpeg)
 
 **动作页 Exercises Page**
 
