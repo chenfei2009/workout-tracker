@@ -1,16 +1,6 @@
 <template>
   <div class="view-profile">
-    <!-- $route.meta.fullscreen: false -->
-    <!-- <WTHeader
-      :backTitle="$route.meta.backTitle || 'Profile'"
-      :rootRoute="$route.meta.backRoute || 'Profile'"
-      :title="$route.meta.banner"
-    /> -->
-    <!-- <tc-hero
-      :dark="$store.getters.darkmode"
-      :hasFixedHeader="$store.getters.isDesktop"
-    > -->
-    <PageHeader title="个人中心" ref="headerRef" />
+    <PageHeader title="个人中心" />
     <div content>
       <router-view />
     </div>
@@ -19,17 +9,13 @@
 </template>
 
 <script setup>
-// import { computed } from '@vue/runtime-core'
-import { useStore } from '@/store/index'
-import router from '@/router'
-
+// import { computed } from 'vue'
+// import { useStore } from '@/store/index'
+// import router from '@/router'
 // import WTHeader from '@/components/WTHeader.vue'
+// import WTRouter from '@/components/WTRouter.vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 
-// import WTRouter from '@/components/WTRouter.vue'
-
-const store = useStore()
-const $route = router.currentRoute
 </script>
 
 <style lang="less" scoped>

@@ -51,7 +51,16 @@
           <div class="info" flow>
             <div class="title">创建训练</div>
             <div class="content">选择身体部位和动作，然后为你进行一次锻炼</div>
-            <a-button shape="round" @click="openFullscreen('CreateWorkout')">我们开始吧</a-button>
+            <a-button
+              shape="round"
+              v-if="store.isUserValid"
+              @click="openFullscreen('CreateWorkout')"
+            >我们开始吧</a-button>
+            <a-button
+              shape="round"
+              v-else
+              @click="openFullscreen('Login')"
+            >点击登录</a-button>
           </div>
           <img class="bg" src="https://ts1.cn.mm.bing.net/th/id/R-C.71f37d7bc5a9063a10935e2c2e256335?rik=Ymg7TWPZkpCPRg&riu=http%3a%2f%2fwww.jianshen8.com%2fuploads%2fallimg%2f171115%2f4_171115173909_1.jpg&ehk=bI4SDV6YdVT%2bcxze6LP1D3jwU5kJzPciJh56zV%2bCLtI%3d&risl=&pid=ImgRaw&r=0">
         </div>

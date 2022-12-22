@@ -67,7 +67,7 @@ const routes = [
 
   {
     path: '/login',
-    name: 'LoginView',
+    name: 'Login',
     component: () => import(/* webpackChunkName: "home" */ '@/views/login/LoginView.vue'),
     meta: {
       fullscreen: true,
