@@ -33,12 +33,14 @@ export async function signIn (form) {
 /**
  * 退出登录
  */
-export async function signOut () {
-  router.push({ name: 'LoginView' })
-  console.log('signOut')
+export function signOut () {
+  // router.push({ name: 'LoginView' })
+  window.localStorage.removeItem(USER)
+  window.localStorage.removeItem(TOKEN)
+  window.localStorage.removeItem(REFRESH_TOKEN)
   const store = useStore()
   store.signOut()
-  // router.push({ name: 'Home' })
+  router.push({ name: 'Home' })
 }
 
 /**

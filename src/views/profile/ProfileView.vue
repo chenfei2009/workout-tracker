@@ -30,11 +30,14 @@
           <a-list-item><span>系统设置</span></a-list-item>
         </a-list>
       </a-card>
+      <br>
+      <a-card title="退出登录" class="signout-btn" @click="signOut"></a-card>
     </div>
   </div>
 </template>
 
 <script setup>
+import { signOut } from '@/api/auth.js'
 </script>
 
 <style lang="less" scoped>

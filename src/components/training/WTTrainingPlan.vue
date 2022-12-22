@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from '@vue/runtime-core'
+import { computed, ref } from 'vue'
 import { useStore } from '@/store/index'
 import WTTrainingPlanDay from './WTTrainingPlanDay.vue'
 import WTHeading from '@/components/WTHeading.vue'
@@ -58,7 +58,7 @@ const days = computed(() => {
   return days
 })
 
-function hasExercises (day) {
+const hasExercises = day => {
   const plan = UserManager.getTrainingPlan()
   if (!plan) return false
   for (const [key, value] of Object.entries(plan)) {
@@ -67,9 +67,7 @@ function hasExercises (day) {
   return false
 }
 
-function getDateInXDays (days) {
-  return new Date(new Date().getTime() + days * aDay).getDate()
-}
+const getDateInXDays = days => (new Date(new Date().getTime() + days * aDay).getDate())
 </script>
 
 <style lang="less" scoped>
@@ -87,9 +85,9 @@ function getDateInXDays (days) {
       &[selected] {
         background: @paragraph_dark;
         color: @color_dark;
-        // @media #{$isDark} {
-        //   background: $paragraph;
-        //   color: $color;
+        // @media ($isDark) {
+        //   background: @paragraph;
+        //   color: @color;
         // }
       }
       .day-name {

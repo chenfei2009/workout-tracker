@@ -1,6 +1,6 @@
 <template>
   <div class="training-detail">
-    <WTBanner :title="running" subTitle="进行中">
+    <WTBanner :title="running" :subTitle="subTitle">
       <template v-slot:media>
         <video playsinline autoplay="autoplay" loop muted>
           <source
@@ -8,7 +8,7 @@
           />
         </video>
       </template>
-      <div>剩余12个动作</div>
+      <div>发现更多训练</div>
     </WTBanner>
 
     <div content>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { computed } from '@vue/runtime-core'
+import { computed } from 'vue'
 import { useStore } from '@/store/index'
 
 import WTButton from '@/components/WTButton.vue'
@@ -37,6 +37,10 @@ import WTBanner from '@/components/WTBanner.vue'
 const store = useStore()
 const running = computed(() => (store.runningWorkout || '腹肌撕裂者初级'))
 
+const subTitle = computed(() => {
+  if (!store.isUserValid) return '今日推荐'
+  return '今日已完成'
+})
 </script>
 
 <style lang="less" scoped>

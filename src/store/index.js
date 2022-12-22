@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-
-import { openFullscreen } from '@/utils/fullScreen'
-import { UserManager } from '@/utils/UserManager'
+import { USER } from '@/utils/constants.js'
+import { openFullscreen } from '@/utils/fullScreen.js'
+import { UserManager } from '@/utils/UserManager.js'
 
 // defineStore 调用后返回一个函数，调用该函数获得 Store 实体
 export const useStore = defineStore({
@@ -11,7 +11,7 @@ export const useStore = defineStore({
   // state: 返回对象的函数
   state: () => ({
     // auth 相关
-    isUserValid: false,
+    isUserValid: !!localStorage.getItem(USER), // false
     userId: null,
 
     // route 相关
