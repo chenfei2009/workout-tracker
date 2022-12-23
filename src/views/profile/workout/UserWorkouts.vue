@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from '@vue/runtime-core'
+import { computed, onMounted, ref } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTTabs from '@/components/WTTabs.vue'
 import WTWorkoutPreview from '@/components/training/WTWorkoutPreview.vue'

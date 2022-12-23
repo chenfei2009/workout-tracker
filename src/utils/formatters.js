@@ -5,7 +5,7 @@ import { anHour, DAYS } from '@/utils/constants'
  * @param time seconds or timestamp
  */
 /* eslint-disable */
-export function formatDate (time) {
+export const formatDate = time => {
   switch (typeof time) {
     case 'number':
       break
@@ -62,7 +62,7 @@ export function formatDate (time) {
  * returns date or XX minutes ago, depending on time.
  * @param {number} timestamp 
  */
-export function formatTimeForMessage (timestamp) {
+export const formatTimeForMessage = timestamp => {
   if (new Date().getTime() - timestamp < 3 * anHour)
     return formatDate(timestamp)
   return (
@@ -82,4 +82,37 @@ export function formatTimeForMessage (timestamp) {
       )
       .join('')
   )
+}
+
+/**
+ * returns date str
+ * @param {number} date timestamp
+ * @param {string} fmt eg.'YYYY-mm-DD'
+ */
+export const formatDateForCale = (date, fmt) => {
+  // 1.获取年份
+  if (/(y+)/.test(fmt)) {
+    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+    // fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').slice(4 - RegExp.$1.length))
+  }
+  // M+ 正则表达式规则
+  const o = {
+    'M+': date.getMonth() + 1,
+    'd+': date.getDate(),
+    'h+': date.getHours(),
+    'm+': date.getMinutes(),
+    's+': date.getSeconds()
+  }
+  for (const k in o) {
+    if (new RegExp(`(${k})`).test(fmt)) {
+      const str = o[k] + ''
+      // fmt = fmt.replace(RegExp.$1, str)
+      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str))
+    }
+  }
+  return fmt
+}
+
+function padLeftZero (str) {
+  return ('00' + str).substr(str.length)
 }

@@ -4,6 +4,11 @@ import { USER } from '@/utils/constants'
 import { _getCreatedWorkouts, _markWorkout } from '@/api/workout'
 
 export class UserManager {
+  static getUserId () {
+    const user = JSON.parse(localStorage.getItem(USER))
+    return user._id
+  }
+
   static addWorkout (workout) {
     let workouts = this.getWorkouts() || []
     let exists = false
@@ -36,8 +41,7 @@ export class UserManager {
   static async loadCreatedWorkouts () {
     // if (!this.getWorkouts() && this.getUser())
     if (!this.getCreatedWorkouts()) {
-      const user = JSON.parse(localStorage.getItem(USER))
-      const { data } = await _getCreatedWorkouts(user._id)
+      const { data } = await _getCreatedWorkouts(this.getUserId())
       this.setCreatedWorkouts(data.data)
     }
   }
@@ -85,8 +89,8 @@ export class UserManager {
   static async loadExercises () {
     // if (!this.getWorkouts() && this.getUser())
     if (!this.getExercises()) {
-      const user = JSON.parse(localStorage.getItem(USER))
-      const { data } = await request.get(`exercise/${user._id}/created`)
+      const userId = this.getUserId()
+      const { data } = await request.get(`exercise/${userId}/created`)
       this.setExercises(data.data)
     }
   }
