@@ -2,7 +2,7 @@
   <div class="header">
     <div class="main" v-if="!isShowInput">
       <div class="title">{{title}}</div>
-      <span class="iconfont icon-search" @click="searchBtnClick" />
+      <span v-if="search" class="iconfont icon-search" @click="searchBtnClick" />
     </div>
     <div class="input-bar" v-else-if="search && isShowInput">
       <span class="iconfont icon-search" @click="submit" />
