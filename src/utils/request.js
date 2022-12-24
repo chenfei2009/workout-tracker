@@ -39,7 +39,10 @@ const authQueue = []
 request.interceptors.response.use(
   response => {
     // console.log(response)
-    if (!response.data.meta || response.data.meta.status !== 401) return response
+    if (!response.data.meta || response.data.meta.status !== 401) {
+      console.log('响应拦截', response.data)
+      return response
+    }
     if (response.data.meta.status === 401) {
       if (!isRefreshing) {
         console.log('token已过期，自动刷新token')

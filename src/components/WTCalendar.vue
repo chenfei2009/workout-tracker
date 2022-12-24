@@ -6,7 +6,12 @@
       <span class="header-text">{{currentYear}}年{{currentMonth + 1}}月</span>
       <span class="iconfont icon-arrow-right-bold" @click="getNextMonth"></span>
     </div>
-
+    <!-- <ul>
+      <li v-for="(item, index) in caleData" :key=index>
+        <span>{{new Date(item.start)}}</span>
+        <span>{{item.areas}}</span>
+      </li>
+    </ul> -->
     <!-- 主体部分 -->
     <div class="cale-main">
       <ul class="cale-week-list">
@@ -20,13 +25,13 @@
           class="date-item center"
           @click="dateItemClick(item.date)">
           <span>{{item.date.getDate()}}</span>
-          <!-- <div>{{MonthDataItem(item.date)}}</div> -->
-          <ul v-if="caleData?.areas">
-            <li v-for="(areas, index) in monthDataItem(item.date)"
+          <!-- <span>{{monthDataItem(item.date)}}</span> -->
+          <ul v-if="monthDataItem(item.date).length > 0">
+            <li v-for="(area, index) in monthDataItem(item.date)"
               :key="index"
               class="month-data-item"
-              :style="monthDataItemStyle(part)"
-              >{{part}}</li>
+              :style="monthDataItemStyle(area)"
+              >{{area}}</li>
           </ul>
           <!-- <slot></slot> -->
         </li>
@@ -54,7 +59,7 @@ defineExpose({
 })
 
 const props = defineProps({
-  caleData: Object
+  caleData: Array
 })
 
 // dateItem 的样式
@@ -68,19 +73,29 @@ const dateItemClass = computed(() => {
   }
 })
 
+// 比较是否为同一天
+const isSameDate = (cur, date) => {
+  // console.log(new Date(cur), date)
+  // console.log('比较year', new Date(cur).getYear(), date.getYear())
+  // console.log('比较month', new Date(cur).getMonth(), date.getMonth())
+  // console.log('比较date', new Date(cur).getDate(), date.getDate())
+  return new Date(cur).getFullYear() === date.getFullYear()
+    && new Date(cur).getMonth() === date.getMonth()
+    && new Date(cur).getDate() === date.getDate()
+}
+
 // monthDataItem 对应的部位列表
 const monthDataItem = computed(() => {
-  return function (date) {
-    const dateStr = formatDateForCale(date, 'yyyy-MM-dd')
-    const partDataItem = []
-    if (props.monthData.volumes.length !== 0) {
-      props.monthData.volumes.forEach(v => {
-        if (v.date === dateStr) partDataItem.push(v.volume)
-      })
-      props.monthData.parts.forEach(v => {
-        if (v.date === dateStr) partDataItem.push(v.part)
-      })
-    }
+  return date => {
+    let partDataItem = []
+    props.caleData.forEach(v => {
+      // console.log('v', v.start, v.areas)
+      if (isSameDate(v.start, date)) {
+        // console.log(v.start)
+        // partDataItem.push(...v.areas)
+        partDataItem = [...new Set(partDataItem.concat(...v.areas))]
+      }
+    })
     return partDataItem
   }
 })
@@ -89,9 +104,9 @@ const monthDataItem = computed(() => {
 const monthDataItemStyle =computed(() => {
   return function (partItem) {
     switch (partItem) {
-      case '胸部':
+      case '胸':
         return { backgroundColor: '#ddb78a' }
-      case '背部':
+      case '背':
         return { backgroundColor: '#5d7482' }
       case '臀腿':
         return { backgroundColor: '#80696f' }
@@ -99,7 +114,7 @@ const monthDataItemStyle =computed(() => {
         return { backgroundColor: '#7aa5ac' }
       case '三头':
         return { backgroundColor: '#c49d8c' }
-      case '肩部':
+      case '肩':
         return { backgroundColor: '#1195a0' }
       case '核心':
         return { backgroundColor: '#b28e80' }
