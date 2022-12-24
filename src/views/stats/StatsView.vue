@@ -36,7 +36,7 @@ const caleStats = ref([])
 
 const dateItemClick = () => console.log('dateItemClick')
 
-const handleDateChange = () => console.log('handleDateChange')
+const handleDateChange = () => getCaleStats()
 
 // 查询当前日期范围部位记录数据
 const getCaleStats = async () => {
@@ -47,11 +47,9 @@ const getCaleStats = async () => {
   let end = dateList[dateList.length - 1].date
   start = new Date(start).getTime()
   end = new Date(end).getTime()
-  // start = formatDateForCale(start, 'yyyy-MM-dd')
-  // end = formatDateForCale(end, 'yyyy-MM-dd')
   const userId = UserManager.getUserId()
-  const data = await _getCaleStats(start, end, userId)
-  console.log('res', data)
+  const { data: res } = await _getCaleStats(start, end, userId)
+  console.log('res.data', res.data)
   // [
   //   { start: 1666949168041, areas: [ '背' ] },
   //   { start: 1666949233817, areas: [ '背' ] },
@@ -59,19 +57,29 @@ const getCaleStats = async () => {
   //   { start: 1666949391883, areas: [ '胸' ] },
   //   { start: 1666949391883, areas: [ '胸' ] }
   // ]
-  const temp = []
-  res.data.forEach(item => {
-    const index = temp.indexOf(item.start)
-    if (index === -1) return temp.push(item)
-    temp[index].areas = [...new Set([temp[index].areas].concat(...item.areas))]
-  })
-  caleStats.value = temp
+  // const temp = []
+  // for (let i = 0; i < res.data.length; i++) {
+  //   const element = res.data[i]
+  //   if (temp.length === 0) return temp.push(element)
+  //   console.log('temp', temp)
+  //   const index = temp.indexOf(v => v.start === element.start)
+  //   if (index === -1) return temp.push(element)
+  //   console.log('index', index)
+  //   temp[index].areas.push(...element.areas)
+  // }
+  // res.data.forEach(item => {
+  //   const index = temp.indexOf(v => v.start === item.start)
+  //   console.log('index', index)
+  //   if (index === -1) return temp.push(item)
+  //   // console.log('index', index)
+  //   temp[index].areas = [...new Set([temp[index].areas].push(...item.areas))]
+  // })
+  // caleStats.value = temp
+  caleStats.value = res.data
   console.log(caleStats.value)
 }
 
 onMounted(async () => {
-  const data = await _getCaleStats(1669564800000, 1669564800000, '6345444c0c3364c6462be6dc')
-  console.log('data', data)
   getCaleStats()
 })
 </script>
