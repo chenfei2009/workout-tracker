@@ -118,6 +118,7 @@ import WTWorkoutPreview from '@/components/training/WTWorkoutPreview.vue'
 import WTHeading from '@/components/WTHeading.vue'
 import WTCarousel from '@/components/WTCarousel.vue'
 import { openFullscreen } from '@/utils/fullScreen'
+import { UserManager } from '@/utils/UserManager'
 import { _getTrendingWorkouts, _getLatestWorkouts } from '@/api/workout'
 
 const store = useStore()
@@ -153,12 +154,14 @@ const areas = reactive([
 // 加载页面初始数据
 const loadTrendingWorkouts = async () => {
   if (store.trendingWorkouts) return
+  // if (!UserManager.getUserId()) return console.log('本地缓存没有用户信息')
   const { data } = await _getTrendingWorkouts()
   store.setTrendingWorkouts(data.data)
 }
 
 const loadLatestWorkouts = async () => {
   if (store.latestWorkouts) return
+  if (!UserManager.getUserId()) return console.log('本地缓存没有用户信息')
   const { data } = await _getLatestWorkouts()
   store.setLatestWorkouts(data.data)
 }

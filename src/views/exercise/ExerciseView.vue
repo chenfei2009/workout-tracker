@@ -95,15 +95,15 @@ onMounted(() => {
 function loadExercises (query = null, areas = null) {
   // 开启loading
   // isLoading.value = true
-  if (!query && !areas) {
-    return request.get('/exercise/all')
-      .then(res => {
-        store.setExercises(res.data.data)
-        // isLoading.value = false
-        console.log(exercises.value)
-      })
-      .catch(err => console.log(err))
-  }
+  // if (!query && !areas) {
+  //   return request.get('/exercise/all')
+  //     .then(res => {
+  //       store.setExercises(res.data.data)
+  //       // isLoading.value = false
+  //       console.log(exercises.value)
+  //     })
+  //     .catch(err => console.log(err))
+  // }
   request.get('/exercise', {
     params: { query, areas }
   })
