@@ -6,7 +6,7 @@ import { _getCreatedWorkouts, _markWorkout } from '@/api/workout'
 export class UserManager {
   static getUserId () {
     const user = JSON.parse(localStorage.getItem(USER))
-    return user._id
+    return user?._id || null
   }
 
   static addWorkout (workout) {

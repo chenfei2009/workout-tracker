@@ -28,6 +28,7 @@ const activeStyle = computed(() => {
 
 function changeItem () {
   // isActive.value = !isActive.value
+  console.log(props.to)
   router.push(props.to)
 }
 </script>

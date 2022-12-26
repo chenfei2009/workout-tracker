@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/home/HomeView.vue'
+import { UserManager } from '@/utils/UserManager'
 
 const prefix = 'WorkoutTracker | '
 
@@ -265,6 +266,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.needsSignIn) {
+    console.log('目标路由需要登录')
+    const userId = UserManager.getUserId()
+    if (!userId) router.push('/login')
+  }
+  next()
 })
 
 export default router
