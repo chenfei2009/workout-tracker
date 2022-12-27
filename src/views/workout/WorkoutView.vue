@@ -129,6 +129,7 @@ const latestWorkouts = computed(() => store.latestWorkouts)
 const banner = ref('https://img2.baidu.com/it/u=996126356,1455664653&fm=253&fmt=auto&app=120&f=JPEG?w=500&h=281')
 
 const URL = 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.mp.itc.cn%2Fq_mini%2Cc_zoom%2Cw_640%2Fupload%2F20160410%2Fd72fe98fc0ed47359740faacbfa0c127_th.jpg&refer=http%3A%2F%2Fimg.mp.itc.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1668667671&t=2b8876cb8463ebde6db3c9e22099fd0d'
+
 // 分类索引
 const cates = reactive([
   { title: '塑形训练', isNew: true, thumbnail: 'https://tse4-mm.cn.bing.net/th/id/OIP-C.PYb9TTzMIv3lss28AweiNQHaEZ?pid=ImgDet&rs=1' },
@@ -161,8 +162,9 @@ const loadTrendingWorkouts = async () => {
 
 const loadLatestWorkouts = async () => {
   if (store.latestWorkouts) return
-  if (!UserManager.getUserId()) return console.log('本地缓存没有用户信息')
-  const { data } = await _getLatestWorkouts()
+  const author = UserManager.getUserId()
+  if (!author) return console.log('本地缓存没有用户信息')
+  const { data } = await _getLatestWorkouts(author)
   store.setLatestWorkouts(data.data)
 }
 
@@ -173,7 +175,7 @@ onMounted(() => {
 })
 
 // 监听页面事件
-function handleClick (query) {
+const handleClick = query => {
   if (typeof query === 'string') {
     query = { cate: query }
   }

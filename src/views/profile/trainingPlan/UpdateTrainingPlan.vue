@@ -105,7 +105,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from '@vue/runtime-core'
+import { computed, ref } from 'vue'
 import router from '@/router'
 
 import WTTransition from '@/components/WTTransition.vue'

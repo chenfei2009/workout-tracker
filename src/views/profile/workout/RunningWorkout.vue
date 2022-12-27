@@ -85,7 +85,7 @@
 
 <script setup>
 import { reactive, ref } from '@vue/reactivity'
-import { computed, onMounted, onUnmounted, watch } from '@vue/runtime-core'
+import { computed, onMounted, onUnmounted, watch } from 'vue'
 
 import WTTransition from '@/components/WTTransition.vue'
 import WTBanner from '@/components/WTBanner.vue'

@@ -35,7 +35,7 @@
 <script setup>
 import { achievementManager } from '@/utils/achievementManager'
 import { formatDate } from '@/utils/formatters'
-import { onMounted } from '@vue/runtime-core'
+import { onMounted } from 'vue'
 
 onMounted(() => {
   // this.$store.commit('clearNewAchievements');

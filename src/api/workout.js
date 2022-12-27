@@ -7,7 +7,7 @@ export const _getWorkouts = async () => request.get('workout')
 export const _getTrendingWorkouts = async () => request.get('workout/trending')
 
 // 获取最近训练
-export const _getLatestWorkouts = async () => request.get('workout/latest')
+export const _getLatestWorkouts = async author => request.get(`workout/${author}/latest`)
 
 // 获取关键词对应的训练
 export const _getCateWorkouts = async params => request.get('workout/list', { params })

@@ -126,9 +126,8 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from '@vue/runtime-core'
+import { computed, onMounted, reactive, ref } from 'vue'
 import router from '@/router'
-
 import WTBanner from '@/components/WTBanner.vue'
 import WTHeader from '@/components/WTHeader.vue'
 import WTHeading from '@/components/WTHeading.vue'
@@ -137,19 +136,18 @@ import WTVarList from '@/components/variableList/WTVarList.vue'
 import WTVarListItem from '@/components/variableList/WTVarListItem.vue'
 import request from '@/utils/request'
 import { ExerciseManager } from '@/utils/ExerciseManager'
+import { UserManager } from '@/utils/UserManager'
+import { _getExerciseById } from '@/api/exercise'
 import { openFullscreen, closeFullscreen } from '@/utils/fullScreen'
-// import { UserManagement } from '@/utils/UserManagement'
 
 const state = reactive({
   exercise: null
 })
 const error = ref(false)
 
-onMounted(() => {
-  console.log(isAuthor.value)
-  // 获取 exercise
-  request
-    .get('exercise/' + router.currentRoute.value.params.id)
+// 获取 exercise
+const getExerciseById = async () => {
+  _getExerciseById(router.currentRoute.value.params.id)
     .then(res => {
       state.exercise = res.data.data
       if (!state.exercise) {
@@ -163,22 +161,21 @@ onMounted(() => {
     })
 })
 
+onMounted(() => getExerciseById())
+
 const isAuthor = computed(() => {
   if (!state.exercise) return false
-  // return exercise.author === UserManagement.getUserID()
-  return state.exercise.author
+  return exercise.author === UserManager.getUserID()
 })
 
-function addToWorkout () {
-  if (state.exercise) {
-    ExerciseManager.addToWorkout(state.exercise)
-  }
+const addToWorkout = () => {
+  if (!state.exercise) return
+  ExerciseManager.addToWorkout(state.exercise)
 }
 
-function updateExercise () {
-  if (state.exercise) {
-    openFullscreen('UpdateExercise', { id: state.exercise._id })
-  }
+const updateExercise = () => {
+  if (!state.exercise) return
+  openFullscreen('UpdateExercise', { id: state.exercise._id })
 }
 
 </script>

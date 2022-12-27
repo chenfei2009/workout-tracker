@@ -11,8 +11,8 @@
 <script setup>
 // import { getDepth } from '@/utils/functions';
 
-const router = require('@/router')
-const { computed, onMounted, ref } = require('@vue/runtime-core')
+import router from '@/router'
+import { computed, onMounted, ref } from 'vue'
 
 const transitionName = ref('slide-bottom')
 const transitionMode = ref('out-in')

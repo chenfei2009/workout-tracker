@@ -34,7 +34,7 @@
 
 <script setup>
 import { anHour, aMinute, aSecond } from '@/utils/constants'
-const { onUnmounted, ref } = require('@vue/runtime-core')
+import { onUnmounted, ref } from 'vue'
 
 const state = ref(0) // 0 = stop (not running), 1 = running, 2 = paused
 const timestamp = ref(0)

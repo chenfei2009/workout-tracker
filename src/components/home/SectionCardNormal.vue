@@ -17,7 +17,7 @@
 // @Prop() description!: string
 // @Prop() size!: 'large' | 'normal'
 
-const { computed } = require('@vue/runtime-core')
+import { computed } from 'vue'
 
 const background = ''
 

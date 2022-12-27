@@ -55,12 +55,12 @@
 </template>
 
 <script setup>
+import WTGraphHead from './WTGraphHead.vue'
 import { ChartOptions } from '@/utils/ChartOptions'
 import { aDay, aWeek, aYear } from '@/utils/constants'
 import { TrainingStatistics } from '@/utils/Trainingstatistics'
-import { computed, ref } from '@vue/runtime-core'
+import { computed, ref } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
-import WTGraphHead from './WTGraphHead.vue'
 
 defineProps({
   onlyToday: {
@@ -86,7 +86,7 @@ const today = computed(() => {
   return 0
 })
 
-const percentage = computed(() => (today.value / recommend) * 100)
+const percentage = computed(() => (today.value / recommend.value) * 100)
 
 const amount = computed(() => {
   if (!healthData.value) return -1

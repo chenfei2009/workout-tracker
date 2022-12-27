@@ -40,6 +40,8 @@
 </template>
 
 <script setup>
+import { onMounted, reactive, ref } from 'vue'
+import router from '@/router'
 import WTSwipeable from '@/components/WTSwipeable.vue'
 import WTWorkoutExercise from '@/components/training/WTWorkoutExercise.vue'
 import WTBanner from '@/components/WTBanner.vue'
@@ -49,8 +51,6 @@ import {
   // formatTimeForMessage
 } from '@/utils/fullScreen'
 import { RunningWorkout } from '@/utils/WorkoutManager'
-import { onMounted, reactive, ref } from '@vue/runtime-core'
-import router from '@/router'
 import { _markWorkout } from '@/api/workout'
 
 const isMark = ref(false)
@@ -85,9 +85,8 @@ onMounted(() => {
 })
 
 const startWorkout = () => {
-  if (state.workout) {
-    RunningWorkout.startWorkout(state.workout.exercises)
-  }
+  if (!state.workout) return
+  RunningWorkout.startWorkout(state.workout.exercises)
 }
 
 const markWorkout = () => _markWorkout(state.workout._id)
