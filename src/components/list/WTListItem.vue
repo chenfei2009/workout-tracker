@@ -36,7 +36,7 @@ const props = defineProps({
 
 const emit = defineEmits('itemClick')
 
-const handleClick e => {
+const handleClick = e => {
   console.log('emit click', e)
   emit('itemClick', e)
   if (props.routeName && !props.to) {
