@@ -24,7 +24,6 @@
 
 <script setup>
 import router from '@/router'
-import { defineProps, defineEmits } from 'vue'
 
 const props = defineProps({
   avatar: String,
@@ -37,7 +36,7 @@ const props = defineProps({
 
 const emit = defineEmits('itemClick')
 
-function handleClick (e) {
+const handleClick e => {
   console.log('emit click', e)
   emit('itemClick', e)
   if (props.routeName && !props.to) {

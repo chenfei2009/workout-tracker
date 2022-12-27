@@ -21,8 +21,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
-
 defineProps({
   title: String,
   subTitle: String,
@@ -71,8 +69,8 @@ function clicked (e) {
 
   .media-deskstop, .media-mobile {
     overflow: hidden;
-    /deep/ img,
-    /deep/ video {
+    :deep(img),
+    :deep(vide) {
       height: 100%;
       width: 100%;
       object-fit: cover;

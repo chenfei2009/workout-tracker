@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref } from '@vue/runtime-core'
+import { ref } from 'vue'
 defineProps({ tabs: Array })
 
 const activeKey = ref(1)
@@ -20,11 +20,11 @@ const onTabClick = activeKey => emit('switch', activeKey)
 </script>
 
 <style lang="less" scoped>
-/deep/ .ant-tabs-nav {
+:deep(.ant-tabs-nav) {
   margin-bottom: 0;
 }
 
-/deep/ .ant-tabs-nav-wrap {
+:deep(.ant-tabs-nav-wrap) {
   // justify-content: space-evenly;
   .ant-tabs-nav-list {
     width: 100%;

@@ -237,7 +237,7 @@ function close () {
     justify-content: space-between;
   }
 
-  /deep/ .tc-segments--head {
+  :deep(.tc-segments--head) {
     background: @color !important;
     // @supports (backdrop-filter: saturate(180%) blur(20px)) {
     //   background: rgba($color, 0.5) !important;

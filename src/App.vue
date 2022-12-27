@@ -3,7 +3,6 @@
   <!-- <WTNavbar /> -->
   <!-- <WTRouter /> -->
   <router-view/>
-  <WTSpontaneousWorkout />
   <!-- <nav>
     <router-link to="/home">Home</router-link> |
     <router-link to="/start">Start</router-link>
@@ -15,7 +14,6 @@
 // import WTNavbar from './components/WTNavbar.vue'
 // import WTRouter from './components/WTRouter.vue'
 import WTTabbar from './components/WTTabbar.vue'
-import WTSpontaneousWorkout from './components/WTSpontaneousWorkout.vue'
 </script>
 
 <style lang="less">

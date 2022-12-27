@@ -197,10 +197,10 @@ function updateExercise () {
     z-index: 10;
   }
 
-  /deep/ .tc-quote--text {
+  :deep(.tc-quote--text) {
     display: none;
   }
-  /deep/ .tc-quote--title__prestyled {
+  :deep(.tc-quote--title__prestyle)d {
     margin-bottom: 0 !important;
   }
 

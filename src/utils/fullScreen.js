@@ -11,8 +11,8 @@ import router from '@/router'
 export function openFullscreen (
   name,
   params = null,
-  query = null,
-  destination = null
+  query = null
+  // destination = null
 ) {
   const store = useStore()
   store.setStoreRoute({

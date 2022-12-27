@@ -2,7 +2,7 @@
   <div class="wt-trainingplan-day">
     <!-- 加载中 -->
     <!-- <van-loading v-if="!isLoaded" :dark="store.darkmode" size="20" /> -->
-    <a-spin v-if="!isLoaded" :delay="200"/>
+    <a-spin v-if="isLoading" :delay="200"/>
 
     <div class="exercises" v-else>
       <div class="title-wrap">
@@ -39,19 +39,17 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 
 // import request from '@/utils/request'
 import { DAYS } from '@/utils/constants'
 // import { openFullscreen } from '@/utils/fullScreen'
 
 import { UserManager } from '@/utils/UserManager'
-// import { WorkoutManagement } from '@/utils/WorkoutManagement'
+// import { WorkoutManager } from '@/utils/WorkoutManager'
 import WTWorkoutPreviewS from '@/components/preview/WTWorkoutPreviewS.vue'
 import WTCarousel from '../WTCarousel.vue'
 import WTHeading from '../WTHeading.vue'
-// import WTListItem from '../list/WTListItem.vue'
-// import FHExercisePreview from './FHExercisePreview.vue';
 
 const props = defineProps({
   daynumber: Number
@@ -59,9 +57,12 @@ const props = defineProps({
 
 // const actionActive = ref(false)
 
-const isLoaded = computed(() => !!UserManager.getTrainingPlan())
+const isLoading = computed(() => 
+  UserManager.getUserId() && !UserManager.getTrainingPlan()
+)
 
-const day = computed((id, exercise) => {
+// const day = computed((id, exercise) => {})
+const day = computed(() => {
   if (props.daynumber === undefined) return null
   const plan = UserManager.getTrainingPlan()
   if (!plan) return null
@@ -134,7 +135,7 @@ const amount = computed(() => {
       margin-left: 0px !important;
     }
 
-    /deep/ .title {
+    :deep(.title) {
       font-weight: 500;
     }
   }

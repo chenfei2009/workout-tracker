@@ -30,7 +30,7 @@
             <li v-for="(area, index) in monthDataItem(item.date)"
               :key="index"
               class="month-data-item"
-              :style="monthDataItemStyle(area)"
+              :style="{backgroundColor: monthDataItemStyle[area]}"
               >{{area}}</li>
           </ul>
           <!-- <slot></slot> -->
@@ -41,8 +41,8 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { formatDateForCale } from '@/utils/formatters.js'
+import { computed, onMounted, reactive, ref } from 'vue'
+// import { formatDateForCale } from '@/utils/formatters.js'
 
 // const initDate = ref('')
 const currentYear = ref('')
@@ -54,9 +54,7 @@ const dateList = ref([])
 // const isCurrentMonth = ref(true)
 // const isCurrentDay = ref(false)
 
-defineExpose({
-  dateList
-})
+defineExpose({ dateList })
 
 const props = defineProps({
   caleData: Array
@@ -100,33 +98,43 @@ const monthDataItem = computed(() => {
   }
 })
 
-// monthDataItem 的样式
-const monthDataItemStyle =computed(() => {
-  return function (partItem) {
-    switch (partItem) {
-      case '胸':
-        return { backgroundColor: '#ddb78a' }
-      case '背':
-        return { backgroundColor: '#5d7482' }
-      case '臀腿':
-        return { backgroundColor: '#80696f' }
-      case '二头':
-        return { backgroundColor: '#7aa5ac' }
-      case '三头':
-        return { backgroundColor: '#c49d8c' }
-      case '肩':
-        return { backgroundColor: '#1195a0' }
-      case '核心':
-        return { backgroundColor: '#b28e80' }
-      case '有氧':
-        return { backgroundColor: '#958ead' }
-      default: {
-        return { backgroundColor: '#5b5d69' }
-      }
-        // break
-    }
-  }
+const monthDataItemStyle = reactive({
+  '胸': '#ddb78a',
+  '背': '#5d7482',
+  '臀腿': '#80696f',
+  '二头': '#7aa5ac',
+  '三头': '#c49d8c',
+  '肩': '#1195a0',
+  '核心': '#b28e80',
+  '有氧': '#958ead'
 })
+// monthDataItem 的样式
+// const monthDataItemStyle =computed(() => {
+//   return function (partItem) {
+//     switch (partItem) {
+//       case '胸':
+//         return { backgroundColor: '#ddb78a' }
+//       case '背':
+//         return { backgroundColor: '#5d7482' }
+//       case '臀腿':
+//         return { backgroundColor: '#80696f' }
+//       case '二头':
+//         return { backgroundColor: '#7aa5ac' }
+//       case '三头':
+//         return { backgroundColor: '#c49d8c' }
+//       case '肩':
+//         return { backgroundColor: '#1195a0' }
+//       case '核心':
+//         return { backgroundColor: '#b28e80' }
+//       case '有氧':
+//         return { backgroundColor: '#958ead' }
+//       default: {
+//         return { backgroundColor: '#5b5d69' }
+//       }
+//         // break
+//     }
+//   }
+// })
 
 /**
  * 设置初始化日期

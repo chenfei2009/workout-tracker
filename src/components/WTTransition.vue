@@ -15,7 +15,7 @@
 
 // 在元素被插入到 DOM 之后的下一帧被调用
 // 用这个来开始进入动画
-function onEnter (el, done) {
+const onEnter = el => {
   const { width } = getComputedStyle(el)
   el.style.width = width
   el.style.position = 'absolute'
@@ -34,14 +34,14 @@ function onEnter (el, done) {
 }
 
 // 当进入过渡完成时调用
-function onAfterEnter (el) {
+const onAfterEnter = el => {
   // el.style.height = 'auto'
   el.style.height = ''
 }
 
 // 在离开过渡开始时调用
 // 用这个来开始离开动画
-function onLeave (el, done) {
+const onLeave = el => {
   el.style.height = getComputedStyle(el).height
   requestAnimationFrame(() => (el.style.height = 0))
   // 调用回调函数 done 表示过渡结束

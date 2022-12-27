@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineExpose } from 'vue'
+import { ref } from 'vue'
 
 defineProps({
   type: {
@@ -86,9 +86,7 @@ const isDoneClick = index => {
   dataSource.value[index].isDone = !dataSource.value[index].isDone
 }
 
-defineExpose({
-  dataSource
-})
+defineExpose({ dataSource })
 </script>
 
 <style lang="less" scoped>

@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from '@vue/runtime-core'
+import { ref, defineEmits } from 'vue'
 
 const xDown = ref(null) // number | null
 const yDown = ref(null) // number | null
