@@ -37,8 +37,7 @@
 </template>
 
 <script setup>
-import { ref } from '@vue/reactivity'
-import { computed, onMounted } from '@vue/runtime-core'
+import { ref, computed, onMounted } from 'vue'
 import { useStore } from '@/store/index'
 
 import PageHeader from '@/components/common/PageHeader.vue'

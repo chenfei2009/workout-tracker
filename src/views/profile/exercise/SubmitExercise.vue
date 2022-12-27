@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref } from '@vue/runtime-core'
+import { ref } from 'vue'
 import router from '@/router'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTTabs from '@/components/WTTabs.vue'

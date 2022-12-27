@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from '@vue/runtime-core'
+import { computed, onMounted, ref } from 'vue'
 import router from '@/router'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTWorkoutPreview from '@/components/training/WTWorkoutPreview.vue'

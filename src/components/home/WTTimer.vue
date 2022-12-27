@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-const { onUnmounted, ref } = require('@vue/runtime-core')
+import { onUnmounted, ref } from 'vue'
 
 const minutes = ref('00')
 const seconds = ref('30')

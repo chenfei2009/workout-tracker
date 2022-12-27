@@ -26,8 +26,6 @@
 
 <script setup>
 import { computed } from 'vue'
-
-// import request from '@/utils/request'
 import { openFullscreen } from '@/utils/fullScreen'
 // import { UserManagement } from '@/utils/UserManagement'
 import { RunningWorkout } from '@/utils/WorkoutManager'

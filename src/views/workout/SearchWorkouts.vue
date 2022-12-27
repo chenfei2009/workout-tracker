@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { reactive, ref } from '@vue/runtime-core'
+import { reactive, ref } from 'vue'
 import request from '@/utils/request'
 import WTWorkoutPreview from '@/components/training/WTWorkoutPreview.vue'
 

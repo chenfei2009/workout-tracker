@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from '@vue/runtime-core'
+import { onMounted, reactive, ref } from 'vue'
 import router from '@/router'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTTabs from '@/components/WTTabs.vue'
