@@ -20,13 +20,13 @@ const routes = [
   { // 发现页
     path: '/workouts',
     name: 'Workouts',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/workout/WorkoutView.vue')
+    component: () => import('@/views/workout/WorkoutView.vue')
   },
 
   { // 训练列表
     path: '/workouts/list',
     name: 'WorkoutList',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/workout/WorkoutList.vue'),
+    component: () => import('@/views/workout/WorkoutList.vue'),
     meta: {
       fullscreen: true,
       fsFallback: 'Workouts'
@@ -36,7 +36,7 @@ const routes = [
   { // 训练详情
     path: '/workout/:id',
     name: 'WorkoutDetails',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/workout/WorkoutDetails.vue'),
+    component: () => import('@/views/workout/WorkoutDetails.vue'),
     meta: {
       title: prefix + 'Workout',
       fullscreen: true,
@@ -47,7 +47,7 @@ const routes = [
   { // 搜索训练
     path: '/workouts/search',
     name: 'SearchWorkouts',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/workout/SearchWorkouts.vue'),
+    component: () => import('@/views/workout/SearchWorkouts.vue'),
     meta: {
       fullscreen: true,
       fsFallback: 'Workouts'
@@ -57,7 +57,7 @@ const routes = [
   { // 动作库
     path: '/exercises',
     name: 'Exercises',
-    component: () => import(/* webpackChunkName: "home" */ '@/views/exercise/ExerciseView.vue')
+    component: () => import('@/views/exercise/ExerciseView.vue')
   },
 
   { // 数据

@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { reactive, computed, ref, onMounted } from '@vue/runtime-core'
+import { reactive, computed, ref, onMounted } from 'vue'
 
 import WTSwipeable from '@/components/WTSwipeable.vue'
 import { closeFullscreen } from '@/utils/fullScreen'

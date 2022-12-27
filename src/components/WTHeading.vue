@@ -4,27 +4,22 @@
       <div class="subtitle" v-if="subtitle">{{ subtitle }}</div>
       <div class="title">{{ title }}</div>
     </div>
-    <div class="more" v-if="seeMore" @click="onClick">更多</div>
+    <div
+      class="more"
+      v-if="to"
+      @click="router.push({ name: to })"
+    >更多</div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
+import router from '@/router'
 
-const props = defineProps({
+defineProps({
   title: String,
   subtitle: String,
-  seeMore: {
-    type: Boolean,
-    default: true
-  }
+  to: String
 })
-
-const emit = defineEmits(['seeMore'])
-
-function onClick () {
-  emit('seeMore', props.title)
-}
 </script>
 
 <style lang="less" scoped>

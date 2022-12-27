@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from '@vue/runtime-core'
+import { computed, onMounted, ref } from 'vue'
 import { useStore } from '@/store'
 
 import request from '@/utils/request'

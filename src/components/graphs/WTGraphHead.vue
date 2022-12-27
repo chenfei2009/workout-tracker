@@ -11,7 +11,7 @@
 <script setup>
 import { aDay, aWeek, aYear, DAYS, MONTHS } from '@/utils/constants'
 import { formatTimeForMessage } from '@/utils/formatters'
-import { computed, defineProps, ref } from '@vue/runtime-core'
+import { computed, ref } from 'vue'
 import WTHeading from '../WTHeading.vue'
 
 const props = defineProps({

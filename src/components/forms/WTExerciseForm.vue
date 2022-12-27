@@ -237,7 +237,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import router from '@/router'
 
 import WTTransition from '@/components/WTTransition.vue'
@@ -512,7 +512,7 @@ function handleCatch (err) {
 
   .wt-table-2 {
     margin-top: 5px;
-    /deep/ .tc-td {
+    :deep(.tc-td) {
       height: 30px;
     }
   }

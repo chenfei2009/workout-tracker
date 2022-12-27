@@ -107,7 +107,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from '@vue/runtime-core'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useStore } from '@/store/index'
 import router from '@/router'
 

@@ -13,7 +13,6 @@
 
 <script setup>
 import router from '@/router'
-import { defineProps } from 'vue'
 
 const $route = router.currentRoute.value
 
@@ -25,18 +24,18 @@ const props = defineProps({
   frosted: Boolean
 })
 
-function handleClick (e) {
+const navigate = to => {
+  if ($route.name === to.name) return
+  router.push(to)
+}
+
+const handleClick = () => {
   if (props.to && props.to.name) {
     navigate(props.to)
   } else if (props.routeName) {
     navigate({ name: props.routeName })
   }
   // this.$emit('click', e);
-}
-
-function navigate (to) {
-  if ($route.name === to.name) return
-  router.push(to)
 }
 </script>
 

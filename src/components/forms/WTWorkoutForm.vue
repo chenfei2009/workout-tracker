@@ -90,7 +90,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, reactive, ref, watch } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 import router from '@/router'
 
 // import { CreateWorkoutDTO } from '@/utils/dtos'
@@ -103,9 +103,7 @@ import { _getExercisesByQuery } from '@/api/exercise'
 import WTList from '../list/WTList.vue'
 import WTListItem from '../list/WTListItem.vue'
 
-const props = defineProps({
-  workout: Object
-})
+const props = defineProps({ workout: Object })
 
 // const errorKey = ref('workout-form')
 const visible = ref(false)

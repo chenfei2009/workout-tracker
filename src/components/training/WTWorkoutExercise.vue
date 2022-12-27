@@ -33,7 +33,6 @@
 </template>
 
 <script setup>
-import { defineProps } from '@vue/runtime-core'
 import { openFullscreen } from '@/utils/fullScreen'
 
 defineProps({ exercise: Object })

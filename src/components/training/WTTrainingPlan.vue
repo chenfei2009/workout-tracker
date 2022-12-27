@@ -1,7 +1,7 @@
 <template>
   <div class="wt-training-plan" max-width>
     <!-- 节标题 -->
-    <WTHeading title="训练计划" subtitle="最近七天" />
+    <WTHeading title="训练计划" subtitle="最近七天" to="TrainingPlan"/>
 
     <!-- 一周训练日历 -->
     <div class="day-tiles">
@@ -28,7 +28,7 @@
     </div>
 
     <!-- 未登录 -->
-    <div v-else class="login" flow crusior>
+    <div v-else class="login" flow crusior @click="router.push('/login')">
       <span>您尚未登录</span>
       <span>点击这里 查看或定制您的训练</span>
     </div>
@@ -38,6 +38,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { useStore } from '@/store/index'
+import router from '@/router'
 import WTTrainingPlanDay from './WTTrainingPlanDay.vue'
 import WTHeading from '@/components/WTHeading.vue'
 import { UserManager } from '@/utils/UserManager'

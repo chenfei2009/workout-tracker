@@ -25,15 +25,14 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from '@vue/runtime-core'
-
+import { computed } from 'vue'
 import { openFullscreen } from '@/utils/fullScreen'
 import { RunningWorkout } from '@/utils/WorkoutManager'
 import WTPreviewSmall from './WTPreviewSmall.vue'
 // import WTWorkoutThumbnail from './WTWorkoutThumbnail.vue'
 
 const props = defineProps({
-  workout: {}
+  workout: Object
 })
 
 // const isAuthor = computed(() => {
@@ -54,23 +53,16 @@ function handleClick (e) {
   openFullscreen('WorkoutDetails', { id: props.workout._id })
 }
 
-function startWorkout () {
+const startWorkout = () => {
   if (!props.workout) return
   RunningWorkout.startWorkout(props.workout.exercises)
 }
 
-function getIntensity (intensity) {
-  switch (intensity) {
-    case 1:
-      return '初级'
-    case 2:
-      return '中级'
-    case 3:
-      return '高级'
-    default:
-      // return null
-      break
-  }
+const getIntensity = intensity => {
+  if (intensity === 1) return '初级'
+  if (intensity === 2) return '中级'
+  if (intensity === 3) return '高级'
+  return null
 }
 </script>
 

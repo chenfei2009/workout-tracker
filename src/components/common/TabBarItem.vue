@@ -6,9 +6,8 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
-import router from '@/router'
 import { computed } from 'vue'
+import router from '@/router'
 
 const props = defineProps({
   to: String,
@@ -26,11 +25,7 @@ const activeStyle = computed(() => {
   return isActive.value ? { color: props.activeColor } : {}
 })
 
-function changeItem () {
-  // isActive.value = !isActive.value
-  console.log(props.to)
-  router.push(props.to)
-}
+const changeItem = () => router.push(props.to)
 </script>
 
 <style scoped>

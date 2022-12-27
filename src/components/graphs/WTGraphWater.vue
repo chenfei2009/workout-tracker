@@ -58,9 +58,8 @@
 import { ChartOptions } from '@/utils/ChartOptions'
 import { aDay, aWeek, aYear } from '@/utils/constants'
 import { TrainingStatistics } from '@/utils/Trainingstatistics'
-import { computed, defineProps, ref } from '@vue/runtime-core'
+import { computed, ref } from '@vue/runtime-core'
 import VueApexCharts from 'vue3-apexcharts'
-
 import WTGraphHead from './WTGraphHead.vue'
 
 defineProps({

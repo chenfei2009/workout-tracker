@@ -65,7 +65,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 import { useStore } from '@/store/index'
 
 // import request from '@/utils/request'

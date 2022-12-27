@@ -18,9 +18,6 @@
 </template>
 
 <script setup>
-
-import { defineProps, defineEmits } from 'vue'
-
 defineProps({
   title: String,
   height: {
@@ -31,10 +28,7 @@ defineProps({
 
 const emit = defineEmits(['click'])
 
-function clicked (e) {
-  emit('click', e)
-}
-
+const clicked = e => emit('click', e)
 </script>
 
 <style lang="less" scoped>
@@ -75,8 +69,8 @@ function clicked (e) {
   }
 
   .media {
-    /deep/ img,
-    /deep/ video {
+    :deep(img),
+    :deep(video) {
       border-radius: @border-radius @border-radius 0 0;
       height: 100%;
       width: 100%;

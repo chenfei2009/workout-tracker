@@ -25,7 +25,7 @@ import WTTabs from '@/components/WTTabs.vue'
 import WTCalendar from '@/components/WTCalendar.vue'
 import { UserManager } from '@/utils/UserManager.js'
 import { _getCaleStats } from '@/api/stats.js'
-import { formatDateForCale } from '@/utils/formatters.js'
+// import { formatDateForCale } from '@/utils/formatters.js'
 
 const tabs = ref(['历史', '统计'])
 
