@@ -1,7 +1,7 @@
 <template>
   <div class="wt-training-plan" max-width>
     <!-- 节标题 -->
-    <WTHeading title="训练计划" subtitle="最近七天" to="TrainingPlan"/>
+    <WTHeading title="训练计划" subtitle="最近七天" :to="{ name: 'TrainingPlan' }"/>
 
     <!-- 一周训练日历 -->
     <div class="day-tiles">
@@ -21,9 +21,17 @@
     </div>
 
     <!-- 当日训练计划 -->
-    <div class="day-wrapper" v-if="store.isUserValid">
+    <div class="day-wrapper" v-if="UserManager.getUserId()">
       <transition name="fade">
-        <WTTrainingPlanDay :key="selected" :daynumber="selected" />
+        <WTTrainingPlanDay
+          :key="selected"
+          :daynumber="selected"
+        />
+        <!-- <WTTrainingPlanDay
+          :key="selected"
+          :daynumber="selected"
+          :day="getDayPlan(selected)"
+        /> -->
       </transition>
     </div>
 
@@ -37,14 +45,11 @@
 
 <script setup>
 import { computed, ref } from 'vue'
-import { useStore } from '@/store/index'
 import router from '@/router'
 import WTTrainingPlanDay from './WTTrainingPlanDay.vue'
 import WTHeading from '@/components/WTHeading.vue'
 import { UserManager } from '@/utils/UserManager'
 import { aDay, DAYS } from '@/utils/constants'
-
-const store = useStore()
 
 const dayNames = ref(DAYS)
 
@@ -59,14 +64,35 @@ const days = computed(() => {
   return days
 })
 
+const plan = computed(() => {
+  if (!UserManager.getTrainingPlan()) {
+    console.log('loadTrainingPlan')
+    UserManager.loadTrainingPlan()
+  }
+  return UserManager.getTrainingPlan()
+})
+
 const hasExercises = day => {
-  const plan = UserManager.getTrainingPlan()
-  if (!plan) return false
-  for (const [key, value] of Object.entries(plan)) {
+  // const plan = UserManager.getTrainingPlan()
+  if (!plan.value) return false
+  for (const [key, value] of Object.entries(plan.value)) {
     if (day.toString() === key && value.length > 0) return true
   }
   return false
 }
+
+// const getDayPlan = day => {
+//   if (day === undefined) return null
+//   if (!plan.value) return null
+//   for (const [key, value] of Object.entries(plan.value)) {
+//     // 此处暂时用虚拟数据
+//     console.log('day changed', day)
+//     if (day.toString() === key) return value
+//   }
+//   return null
+// }
+
+// const dayPlan = computed(() => getDayPlan(selected.value) )
 
 const getDateInXDays = days => (new Date(new Date().getTime() + days * aDay).getDate())
 </script>

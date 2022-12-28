@@ -12,11 +12,12 @@
         <template v-slot:media>
           <img :src="state.exercise.thumbnail || '/assets/hero/home.webp'" alt="" />
         </template>
-        <div>
-          <a-button>收藏</a-button>
+        <div class="action" flow>
+          <a-button v-if="state.exercise.isMarked" @click="cancelMarkExercise">取消收藏</a-button>
+          <a-button v-else @click="markExercise">收藏</a-button>
           <a-button @click="addToWorkout">添加</a-button>
-          <a-button @click="updateExercise">更新</a-button>
-          <a-button>删除</a-button>
+          <a-button v-if="isAuthor" @click="updateExercise">更新</a-button>
+          <a-button v-if="isAuthor" @click="deleteExercise">删除</a-button>
         </div>
       </WTBanner>
     </WTSwipeable>
@@ -126,7 +127,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { onMounted, reactive, ref, computed } from 'vue'
 import router from '@/router'
 import WTBanner from '@/components/WTBanner.vue'
 import WTHeader from '@/components/WTHeader.vue'
@@ -134,10 +135,9 @@ import WTHeading from '@/components/WTHeading.vue'
 import WTSwipeable from '@/components/WTSwipeable.vue'
 import WTVarList from '@/components/variableList/WTVarList.vue'
 import WTVarListItem from '@/components/variableList/WTVarListItem.vue'
-import request from '@/utils/request'
 import { ExerciseManager } from '@/utils/ExerciseManager'
 import { UserManager } from '@/utils/UserManager'
-import { _getExerciseById } from '@/api/exercise'
+import { _getExerciseById, _markExercise, _cancelMarkExercise } from '@/api/exercise'
 import { openFullscreen, closeFullscreen } from '@/utils/fullScreen'
 
 const state = reactive({
@@ -150,23 +150,45 @@ const getExerciseById = async () => {
   _getExerciseById(router.currentRoute.value.params.id)
     .then(res => {
       state.exercise = res.data.data
-      if (!state.exercise) {
-        console.log(res.data)
-        // closeFullscreen('Training')
-      }
+      // if (!state.exercise) closeFullscreen('Training')
+      console.log(res.data.data.isMarked)
     })
     .catch(() => {
       error.value = true
       // closeFullscreen('Training')
     })
-})
+}
 
 onMounted(() => getExerciseById())
 
+const userId = UserManager.getUserId()
+
 const isAuthor = computed(() => {
   if (!state.exercise) return false
-  return exercise.author === UserManager.getUserID()
+  return state.exercise.author === userId
 })
+
+// 收藏动作
+const markExercise = async () => {
+  if (!state.exercise) return
+  try {
+    const { data: res } = await _markExercise(state.exercise._id)
+    if (res.meta.status === 200) state.exercise.isMarked = true
+  } catch (err) {
+    console.error(err)
+  } 
+}
+
+// 取消收藏动作
+const cancelMarkExercise = async () => {
+  if (!state.exercise) return
+  try {
+    const { data: res } = await _cancelMarkExercise(state.exercise._id)
+    if (res.meta.status === 200) state.exercise.isMarked = false
+  } catch (err) {
+    console.error(err)
+  } 
+}
 
 const addToWorkout = () => {
   if (!state.exercise) return
@@ -199,6 +221,10 @@ const updateExercise = () => {
   }
   :deep(.tc-quote--title__prestyle)d {
     margin-bottom: 0 !important;
+  }
+
+  .action {
+    gap: 10px;
   }
 
   [content] {

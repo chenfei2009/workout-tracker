@@ -27,7 +27,7 @@
       <a-divider />
       <h4>全部动作</h4>
       <div max-width>
-        <WTWorkoutExercise
+        <WTExercisePreview
           v-for="(e, i) in state.workout.exercises"
           :key="i"
           :exercise="e"
@@ -43,7 +43,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import router from '@/router'
 import WTSwipeable from '@/components/WTSwipeable.vue'
-import WTWorkoutExercise from '@/components/training/WTWorkoutExercise.vue'
+import WTExercisePreview from '@/components/training/WTExercisePreview.vue'
 import WTBanner from '@/components/WTBanner.vue'
 import request from '@/utils/request'
 import {

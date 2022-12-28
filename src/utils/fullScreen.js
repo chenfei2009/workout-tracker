@@ -2,7 +2,6 @@ import { useStore } from '@/store/index'
 import router from '@/router'
 
 /**
- *
  * @param {string} name
  * @param {Dictionary<string> | undefined} params
  * @param {Query} query
@@ -19,6 +18,7 @@ export function openFullscreen (
     key: name,
     route: router.currentRoute.value
   })
+  console.log('跳转页面', name)
   router.push({ name, params, query })
   // if (destination || router.currentRoute.value.name !== name) {
   //   router.push({ name, params, query })

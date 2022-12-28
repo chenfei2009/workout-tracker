@@ -1,6 +1,6 @@
 <template>
   <div
-    class="wt-workout-exercise"
+    class="wt-exercise-preview"
     v-if="exercise"
     @click="openFullscreen('ExerciseDetails', { id: exercise._id })"
   >
@@ -48,7 +48,7 @@ function getInfo (exercise) {
 </script>
 
 <style lang="less" scoped>
-.wt-workout-exercise {
+.wt-exercise-preview {
   &:not(:last-child) {
     margin-bottom: 10px;
     padding-bottom: 10px;

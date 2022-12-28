@@ -7,7 +7,7 @@
     <div
       class="more"
       v-if="to"
-      @click="router.push({ name: to })"
+      @click="router.push(to)"
     >更多</div>
   </div>
 </template>
@@ -18,7 +18,7 @@ import router from '@/router'
 defineProps({
   title: String,
   subtitle: String,
-  to: String
+  to: Object
 })
 </script>
 

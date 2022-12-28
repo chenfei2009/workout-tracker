@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/home/HomeView.vue'
+// import HomeView from '../views/home/HomeView.vue'
 import { UserManager } from '@/utils/UserManager'
 
 const prefix = 'WorkoutTracker | '
@@ -12,7 +12,7 @@ const routes = [
       {
         path: '/home',
         name: 'Home',
-        component: HomeView
+        component: () => import('@/views/home/HomeView.vue')
       }
     ]
   },
@@ -58,6 +58,17 @@ const routes = [
     path: '/exercises',
     name: 'Exercises',
     component: () => import('@/views/exercise/ExerciseView.vue')
+  },
+
+  {
+    path: '/exercise/:id',
+    name: 'ExerciseDetails',
+    component: () => import(/* webpackChunkName: "start" */ '../views/exercise/ExerciseDetails.vue'),
+    meta: {
+      title: prefix + 'exercise',
+      fullscreen: true,
+      fsFallback: 'Training'
+    }
   },
 
   { // 数据
@@ -114,31 +125,6 @@ const routes = [
   },
 
   /**
-   * training/workouts
-   */
-  // {
-  //   path: '/training/workout/:id',
-  //   name: 'WorkoutDetails',
-  //   component: () => import('@/views/training/WorkoutDetails.vue'),
-  //   meta: {
-  //     title: prefix + 'Workout',
-  //     fullscreen: true,
-  //     fsFallback: 'Training'
-  //   }
-  // },
-  {
-    path: '/training/workout/:id/update',
-    name: 'UpdateWorkout',
-    component: () => import('@/views/profile/workout/UpdateWorkout.vue'),
-    meta: {
-      title: prefix + 'Update Workout',
-      fullscreen: true,
-      needsSignIn: true,
-      fsFallback: 'Workouts'
-    }
-  },
-
-  /**
    * profile/workouts
    */
   { // 我的训练  收藏/创建
@@ -157,6 +143,17 @@ const routes = [
     component: () => import('@/views/profile/workout/CreateWorkout.vue'),
     meta: {
       title: prefix + 'Create Workout',
+      fullscreen: true,
+      needsSignIn: true,
+      fsFallback: 'Workouts'
+    }
+  },
+  { // 更新训练
+    path: '/profile/workout/:id/update',
+    name: 'UpdateWorkout',
+    component: () => import('@/views/profile/workout/UpdateWorkout.vue'),
+    meta: {
+      title: prefix + 'Update Workout',
       fullscreen: true,
       needsSignIn: true,
       fsFallback: 'Workouts'
@@ -203,7 +200,9 @@ const routes = [
     }
   },
 
-  /* profile/trainingplan */
+  /**
+   * profile/trainingplan
+   */
   { // 训练计划
     path: '/profile/trainingplan',
     name: 'TrainingPlan',
@@ -224,17 +223,6 @@ const routes = [
       fullscreen: true,
       needsSignIn: true,
       fsFallback: 'TrainingPlan'
-    }
-  },
-
-  {
-    path: '/training/exercise/:id',
-    name: 'ExerciseDetails',
-    component: () => import(/* webpackChunkName: "start" */ '../views/exercise/ExerciseDetails.vue'),
-    meta: {
-      title: prefix + 'exercise',
-      fullscreen: true,
-      fsFallback: 'Training'
     }
   },
 
