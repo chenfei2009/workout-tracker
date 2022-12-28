@@ -7,7 +7,7 @@
 
     <div content max-width>
       <div class="list-wrap" flow v-if="exercises && exercises.length > 0">
-        <WTWorkoutExercise
+        <WTExercisePreview
           v-for="e in exercises"
           :key="e._id"
           :exercise="e"
@@ -21,7 +21,7 @@
 import { computed, onMounted, ref } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTTabs from '@/components/WTTabs.vue'
-import WTWorkoutExercise from '@/components/training/WTWorkoutExercise.vue'
+import WTExercisePreview from '@/components/training/WTExercisePreview.vue'
 import { UserManager } from '@/utils/UserManager'
 
 // const activeKey = ref(1) // -1

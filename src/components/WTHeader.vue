@@ -57,6 +57,8 @@ const isRoot = computed(() => {
   return router.currentRoute.value.name === props.rootRoute
 })
 
+const onScroll = () => (enhanced.value = window.scrollY > props.trigger)
+
 onMounted(() => {
   console.log('enhanced初始值', enhanced.value)
   console.log('!isRoot && backTitle', !isRoot.value, props.backTitle)
@@ -67,13 +69,9 @@ onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
 })
 
-function onScroll () {
-  enhanced.value = window.scrollY > props.trigger
-}
-
-function handleClick (e) {
-  // console.log('emit click', e)
-  if (props.fullScreenCloser) router.push({ name: props.fullScreenCloser })
+const handleClick = () => {
+  if (!props.fullScreenCloser) return
+  router.push({ name: props.fullScreenCloser })
 }
 </script>
 

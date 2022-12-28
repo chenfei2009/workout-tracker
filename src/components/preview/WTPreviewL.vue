@@ -8,10 +8,6 @@
       <!-- <div v-if="$slots.default || $slots.action" horizontal="space-between"> -->
       <div class="content">
         <slot />
-        <!-- <div :dark="$store.getters.darkmode"> -->
-        <div>
-          <slot name="action" />
-        </div>
       </div>
     </div>
   </div>
@@ -84,7 +80,7 @@ const clicked = e => emit('click', e)
       font-size: 1.4em;
       position: relative;
       z-index: 10;
-
+      
       border-radius: 0 0 @border-radius @border-radius;
 
       background: linear-gradient(
@@ -108,13 +104,15 @@ const clicked = e => emit('click', e)
       //   );
       // }
 
-      padding: 10px 20px 20px;
+      padding: 10px 20px 10px;
       margin-top: -25px;
     }
 
     .content {
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      padding: 0 20px 10px 20px;
     }
 
     .tl-flow {

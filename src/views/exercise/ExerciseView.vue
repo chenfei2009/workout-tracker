@@ -25,7 +25,7 @@
 
         <!-- 动作列表 -->
         <section v-else-if="exercises && exercises.length > 0">
-          <WTWorkoutExercise
+          <WTExercisePreview
             v-for="(e, i) in exercises"
             :key="i"
             :exercise="e"
@@ -33,7 +33,7 @@
             <template v-slot:action>
               <a-button shape="round">开始训练</a-button>
             </template>
-          </WTWorkoutExercise>
+          </WTExercisePreview>
         </section>
 
         <!-- 新增自定义动作 -->
@@ -54,7 +54,7 @@ import { useStore } from '@/store'
 
 import request from '@/utils/request'
 import PageHeader from '@/components/common/PageHeader.vue'
-import WTWorkoutExercise from '@/components/training/WTWorkoutExercise.vue'
+import WTExercisePreview from '@/components/preview/WTExercisePreview.vue'
 
 const selected = ref(-1)
 const isLoading = ref(false)

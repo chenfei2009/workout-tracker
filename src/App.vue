@@ -34,6 +34,7 @@ import WTTabbar from './components/WTTabbar.vue'
   //   color: $color_dark;
   // }
 
+  min-height: 100vh;
   overflow-x: hidden;
 }
 

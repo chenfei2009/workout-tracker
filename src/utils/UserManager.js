@@ -61,6 +61,7 @@ export class UserManager {
    */
   static getTrainingPlan () {
     const store = useStore()
+    // if (!store.trainingPlan) this.loadTrainingPlan()
     return store.trainingPlan
   }
 

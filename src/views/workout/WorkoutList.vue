@@ -7,6 +7,7 @@
         v-for="w in workouts"
         :key="w._id"
         :workout="w"
+        size="large"
       />
     </div>
   </div>
@@ -16,7 +17,7 @@
 import { computed, onMounted, ref } from 'vue'
 import router from '@/router'
 import PageHeader from '@/components/common/PageHeader.vue'
-import WTWorkoutPreview from '@/components/training/WTWorkoutPreview.vue'
+import WTWorkoutPreview from '@/components/preview/WTWorkoutPreview.vue'
 import { _getCateWorkouts, _getTrendingWorkouts } from '@/api/workout'
 
 const params = router.currentRoute.value.query

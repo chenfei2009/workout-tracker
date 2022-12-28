@@ -19,9 +19,9 @@
       <!-- 最近流行 workouts -->
       <WTTransition>
         <section v-if="trendingWorkouts && trendingWorkouts.length > 0">
-          <WTHeading title="正在流行" @seeMore="handleClick" />
+          <WTHeading title="正在流行" :to="{ name: 'WorkoutList', query: { cate: '正在流行' } }" />
           <WTCarousel>
-            <WTWorkoutPreviewS
+            <WTWorkoutPreview
               v-for="w in trendingWorkouts"
               :key="w._id"
               :workout="w"
@@ -39,6 +39,7 @@
               v-for="w in latestWorkouts"
               :key="w._id"
               :workout="w"
+              size="large"
             />
           </WTCarousel>
         </section>
@@ -112,9 +113,9 @@ import { useStore } from '@/store/index'
 import router from '@/router'
 
 import WTTransition from '@/components/WTTransition.vue'
-import WTWorkoutPreviewS from '@/components/preview/WTWorkoutPreviewS.vue'
+import WTWorkoutPreview from '@/components/preview/WTWorkoutPreview.vue'
 import WTBanner from '@/components/WTBanner.vue'
-import WTWorkoutPreview from '@/components/training/WTWorkoutPreview.vue'
+// import WTWorkoutPreview from '@/components/training/WTWorkoutPreview.vue'
 import WTHeading from '@/components/WTHeading.vue'
 import WTCarousel from '@/components/WTCarousel.vue'
 import { openFullscreen } from '@/utils/fullScreen'

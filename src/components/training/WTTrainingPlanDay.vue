@@ -15,7 +15,7 @@
       </div>
       <template v-if="day">
         <WTCarousel>
-          <WTWorkoutPreviewS
+          <WTWorkoutPreview
             v-for="w in day"
             :key="w._id"
             :workout="w"
@@ -47,7 +47,7 @@ import { DAYS } from '@/utils/constants'
 
 import { UserManager } from '@/utils/UserManager'
 // import { WorkoutManager } from '@/utils/WorkoutManager'
-import WTWorkoutPreviewS from '@/components/preview/WTWorkoutPreviewS.vue'
+import WTWorkoutPreview from '@/components/preview/WTWorkoutPreview.vue'
 import WTCarousel from '../WTCarousel.vue'
 import WTHeading from '../WTHeading.vue'
 
@@ -65,13 +65,11 @@ const isLoading = computed(() =>
 const day = computed(() => {
   if (props.daynumber === undefined) return null
   const plan = UserManager.getTrainingPlan()
+  console.log('plan', plan)
   if (!plan) return null
   for (const [key, value] of Object.entries(plan)) {
     // 此处暂时用虚拟数据
-    if (props.daynumber.toString() === key) {
-      // 返回一个数组
-      return value
-    }
+    if (props.daynumber.toString() === key) return value
   }
   return null
 })

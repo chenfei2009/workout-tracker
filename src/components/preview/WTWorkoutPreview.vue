@@ -1,12 +1,19 @@
 <template>
-  <WTPreviewSmall
+  <!-- <WTPreviewSmall
     v-if="workout"
     class="wt-workout-preview-s"
     @click="handleClick"
     :title="workout.title"
+  > -->
+  <component
+    :is="getComp.get(size)"
+    :key="size"
+    v-if="workout"
+    class="wt-workout-preview"
+    @click="handleClick"
+    :title="workout.title"
   >
     <template v-slot:media>
-      <!-- <img :src="thumbnail" alt=""> -->
       <div
         class="workout-thumbnail"
         v-if="thumbnail"
@@ -16,23 +23,28 @@
 
     <div class="exercise-amount">
       <span>{{ getIntensity(workout.intensity) }}</span>
-      <span>|{{ workout.exercises.length }}个动作</span>
+      <span> | {{ workout.exercises.length }}个动作</span>
     </div>
 
     <a-button shape="round" @click.stop="startWorkout">开始训练</a-button>
 
-  </WTPreviewSmall>
+  </component>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { shallowRef, computed, defineAsyncComponent } from 'vue'
 import { openFullscreen } from '@/utils/fullScreen'
 import { RunningWorkout } from '@/utils/WorkoutManager'
-import WTPreviewSmall from './WTPreviewSmall.vue'
+// import WTPreviewSmall from './WTPreviewSmall.vue'
+// import WTPreviewLarge from './WTPreviewLarge.vue'
 // import WTWorkoutThumbnail from './WTWorkoutThumbnail.vue'
 
 const props = defineProps({
-  workout: Object
+  workout: Object,
+  size: {
+    type: String,
+    default: 'small'
+  }
 })
 
 // const isAuthor = computed(() => {
@@ -41,14 +53,28 @@ const props = defineProps({
 //   // return this.workout.author === UserManagement.getUserID()
 // })
 
+// const compName = ref('')
+// const compName = computed(() => {
+//   if (props.size === 'small') return 'WTPreviewSmall'
+//   return 'WTPreviewLarge'
+// })
+
+const getComp = shallowRef(new Map())
+getComp.value.set(
+  'small',
+  defineAsyncComponent(() => import('./WTPreviewS.vue'))
+)
+getComp.value.set(
+  'large',
+  defineAsyncComponent(() => import('./WTPreviewL.vue'))
+)
+
 const thumbnail = computed(() => {
   if (props.workout.thumbnail) return props.workout.thumbnail
   return props.workout.exercises[0].thumbnail
 })
 
-function handleClick (e) {
-  console.log('emit click', e)
-  // emit('click', e)
+const handleClick = () => {
   if (!props.workout) return
   openFullscreen('WorkoutDetails', { id: props.workout._id })
 }
@@ -67,13 +93,12 @@ const getIntensity = intensity => {
 </script>
 
 <style lang="less" scoped>
-.wt-workout-preview-s {
-  // height: 100px;
+.wt-workout-preview {
+  // width: 100%;
+  // height: 100%;
+  overflow: hidden;
   .workout-thumbnail {
-    height: 120px;
-    border-radius: @border-radius 0 0 @border-radius;
-    overflow: hidden;
-
+    height: 100%;
     background-position: center;
     background-size: cover;
   }
@@ -91,9 +116,9 @@ const getIntensity = intensity => {
   }
 
   .ant-btn {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
+    // position: absolute;
+    // right: 10px;
+    // bottom: 10px;
     // width: 7rem;
     // height: 2rem;
     // border-radius: 1rem;
