@@ -81,8 +81,8 @@ import WTSwipeable from '@/components/WTSwipeable.vue'
 import { closeFullscreen } from '@/utils/fullScreen'
 import { signIn, signUp, vertifyEmail } from '@/api/auth'
 
-const formState = reactive({
-  email: '460461118@qq.com',
+const formState = reactive({ // 测试账户
+  email: '12345678@qq.com',
   password: '123456',
   confirm: '',
   remember: true,

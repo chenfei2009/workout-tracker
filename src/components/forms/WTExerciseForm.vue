@@ -68,11 +68,14 @@
           </div>
           <div class="option" @click="showDrawer('选择目标部位')">
             <div class="label">目标部位</div>
-            <div class="input">{{dto.area}} <span class="iconfont icon-arrow-right-bold" /></div>
+            <div class="input">{{areas}} <span class="iconfont icon-arrow-right-bold" /></div>
           </div>
           <div class="option" @click="showDrawer('选择目标肌群')">
             <div class="label">目标肌群</div>
-            <div class="input"><span class="iconfont icon-arrow-right-bold" /></div>
+            <div class="input">
+              <div class="selected">{{affectedMuscles}}</div>
+              <div class="iconfont icon-arrow-right-bold" />
+            </div>
           </div>
           <div class="option">
             <div class="label">难度等级</div>
@@ -102,7 +105,7 @@
               <template #addonBefore>min </template></a-input>
             <a-input
               type="number"
-              :min="dto.sets.max"
+              :min="dto.sets.min"
               step="1"
               v-model:value="dto.sets.max">
               <template #addonBefore>max</template></a-input>
@@ -115,13 +118,15 @@
               min="1"
               step="1"
               v-model:value="dto.reps.min">
-              <template #addonBefore>min </template></a-input>
+              <template #addonBefore>min </template>
+            </a-input>
             <a-input
               type="number"
-              :min="dto.reps.max"
+              :min="dto.reps.min"
               step="1"
               v-model:value="dto.reps.max">
-              <template #addonBefore>max</template></a-input>
+              <template #addonBefore>max</template>
+            </a-input>
           </div>
 
           <!-- <tc-divider :dark="$store.getters.darkmode" name="Zeit-Übung" /> -->
@@ -237,13 +242,12 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import router from '@/router'
-
 import WTTransition from '@/components/WTTransition.vue'
-import request from '@/utils/request'
 import { AREAS, MUSCLES } from '@/utils/constants'
 // import FHErrorList from '@/components/FHErrorList.vue'
+import { _createExercise, _updateExercise } from '@/api/exercise'
 // import { CreateExerciseDTO } from '@/utils/dtos'
 // import { NotificationManagement } from '@/utils/NotificationManagement'
 // import { VariableManagement } from '@/utils/VariableManagement'
@@ -298,9 +302,26 @@ const dto = reactive({
   intensity: 1,
   warnings: [],
   steps: [],
-  sets: {}, // min: 1, max: 8
-  reps: {} // min: 1, max: 8
+  sets: {
+    min: null,
+    max: null
+  }, // min: 1, max: 8
+  reps: {
+    min: null,
+    max: null
+  } // min: 1, max: 8
 })
+
+const areas = computed(() => 
+  areaOptions.value
+    .filter(x => x.isSelected === true)
+    .map(x => x.value)
+    .join(','))
+const affectedMuscles = computed(() => 
+  muscleOptions.value
+    .filter(x => x.isSelected === true)
+    .map(x => x.value)
+    .join(','))
 
 const changeType = value => {
   onClose()
@@ -311,9 +332,19 @@ const desc = ref(['初级', '中级', '高级'])
 
 // const muscles = computed(() => VariableManagement.getMuscleNames())
 
-onMounted(() => {
-  setGym()
+/**
+ * 初始化页面数据
+ */
+const mapMinMaxString = s => {
+  if (!s) return { min: 0, max: 0 }
+  if (s.includes('-')) {
+    const split = s.split(' - ')
+    return { min: +split[0], max: +split[1] }
+  }
+  return { min: +s, max: +s }
+}
 
+const init = () => {
   if (props.exercise) {
     const ex = props.exercise
 
@@ -347,45 +378,33 @@ onMounted(() => {
   } else if (router.currentRoute.value.name === 'ExerciseSubmission') {
     mode.value = props.exercise.reviewed ? 'change' : 'publish'
   }
+}
 
-  // props.activeKey = 1
-})
+onMounted(() => init())
 
-function addStep () {
+/**
+ * 事件监听相关方法
+ */
+const addStep = () => {
   if (step.value.length < 10) return
   dto.steps.push(step)
   step.value = ''
 }
 
-function removeStep (index) {
-  dto.steps.splice(index, 1)
-}
+const removeStep = index => dto.steps.splice(index, 1)
 
-function addWarning () {
+const addWarning = () => {
   if (warning.value.length < 10) return
   dto.warnings.push(warning)
   warning.value = ''
 }
 
-function removeWarning (index) {
-  dto.Warning.splice(index, 1)
-}
+const removeWarning = index => dto.Warning.splice(index, 1)
 
-function setGym () {
-  dto.reps = { min: 1, max: 12 }
-  dto.sets = { min: 1, max: 6 }
-}
-
-function mapMinMaxString (s) {
-  if (!s) return { min: 0, max: 0 }
-  if (s.includes('-')) {
-    const split = s.split(' - ')
-    return { min: +split[0], max: +split[1] }
-  }
-  return { min: +s, max: +s }
-}
-
-function cleanDTO () {
+/**
+ * 创建/更新动作相关方法
+ */
+const cleanDTO = () => {
   dto.areas = areaOptions.value
     .filter(x => x.isSelected === true)
     .map(x => x.value)
@@ -409,24 +428,22 @@ function cleanDTO () {
   // dto.intensity = +dto.intensity
 }
 
-async function createExercise () {
+const createExercise = async () => {
   if (isSubmitting.value) return
   isSubmitting.value = true
   cleanDTO()
   console.log('createExercise', dto)
-  request
-    .post('exercise', dto)
+  _createExercise(dto)
     .then(handleResponse)
     .catch(handleCatch)
 }
 
-async function updateExercise () {
+const updateExercise = async () => {
   if (isSubmitting.value) return
   isSubmitting.value = true
   cleanDTO()
   console.log('updateExercise', dto)
-  request
-    .put('exercise/update/' + props.exercise._id, dto)
+  _updateExercise(props.exercise._id, dto)
     .then(handleResponse)
     .catch(handleCatch)
 }
@@ -496,10 +513,27 @@ function handleCatch (err) {
     .option {
       display: flex;
       justify-content: space-between;
+      // align-items: center;
       background-color: #fff;
       margin: 10px 0;
       padding: 15px;
       border-radius: @border-radius;
+      .label {
+        flex: 0 0 60px;
+      }
+      .input{
+        display: flex;
+        justify-content: flex-end;
+        overflow: hidden;
+        .selected {
+          // display: inline-block;
+          max-width: calc(100vw - 170px);
+          // line-height: 10px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
     }
   }
 

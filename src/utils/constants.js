@@ -16,5 +16,5 @@ export const USER = 'workout_tracker_user'
 export const TOKEN = 'workout_tracker_access_token'
 export const REFRESH_TOKEN = 'workout_tracker_refresh_token'
 
-export const AREAS = ['胸', '核心', '肩', '手臂', '背', '臀腿']
+export const AREAS = ['胸', '背', '臀腿', '肩', '二头', '三头', '核心', '全身' ]
 export const MUSCLES = ['上胸', '中下胸', '前束', '中束', '背部', '下背', '二头', '三头', '腹肌', '臀大肌', '股四头肌', '腘绳肌']

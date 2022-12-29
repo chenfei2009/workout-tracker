@@ -12,9 +12,10 @@
         <template v-slot:media>
           <img :src="state.exercise.thumbnail || '/assets/hero/home.webp'" alt="" />
         </template>
-        <div class="action" flow>
-          <a-button v-if="state.exercise.isMarked" @click="cancelMarkExercise">取消收藏</a-button>
-          <a-button v-else @click="markExercise">收藏</a-button>
+        <div flow>
+          <a-button @click="subExercise">
+            {{state.exercise.isMarked ? '取消收藏' : '收藏'}}
+          </a-button>
           <a-button @click="addToWorkout">添加</a-button>
           <a-button v-if="isAuthor" @click="updateExercise">更新</a-button>
           <a-button v-if="isAuthor" @click="deleteExercise">删除</a-button>
@@ -65,13 +66,13 @@
 
       <!-- desc -->
       <template v-if="state.exercise.desc">
-        <WTHeading title="动作简介" :seeMore="false" />
+        <WTHeading title="动作简介" />
         <div>{{state.exercise.desc}}</div>
         <br />
       </template>
 
       <!-- Affected Muscles -->
-      <WTHeading title="目标肌群" :seeMore="false" />
+      <WTHeading title="目标肌群" />
       <WTVarList>
         <!-- :to="{ name: 'muscle-exercises', params: { muscle: m } }" -->
         <WTVarListItem
@@ -81,25 +82,9 @@
         />
       </WTVarList>
 
-      <template v-if="state.exercise.warnings && state.exercise.warnings.length > 0">
-        <br />
-        <WTHeading title="注意事项" :seeMore="false" />
-        <div
-          v-for="(w, i) in state.exercise.warnings"
-          :key="'w-' + i"
-        >{{w}}</div>
-        <!-- <tc-quote
-          :dark="$store.getters.darkmode"
-          v-for="(w, i) in exercise.warnings"
-          :title="w"
-          :key="'w-' + i"
-          tfcolor="error"
-        /> -->
-      </template>
-
       <template v-if="state.exercise.steps && state.exercise.steps.length > 0">
         <br />
-        <WTHeading title="步骤" :seeMore="false" />
+        <WTHeading title="步骤" />
 
         <div class="exercise-steps">
           <div
@@ -113,9 +98,25 @@
         </div>
       </template>
 
+      <template v-if="state.exercise.warnings && state.exercise.warnings.length > 0">
+        <br />
+        <WTHeading title="注意事项" />
+        <div
+          v-for="(w, i) in state.exercise.warnings"
+          :key="'w-' + i"
+        >{{w}}</div>
+        <!-- <tc-quote
+          :dark="$store.getters.darkmode"
+          v-for="(w, i) in exercise.warnings"
+          :title="w"
+          :key="'w-' + i"
+          tfcolor="error"
+        /> -->
+      </template>
+
       <div>
         <br />
-        <WTHeading title="Area" subtitle="right" :seeMore="false" />
+        <WTHeading title="部位" subtitle="图示" />
 
         <div class="img-wrap">
           <img src="https://static.ouj.com/hiyd_cms/muscle/2b09475829ef4c608c8eb15fea82c820.gif
@@ -137,7 +138,7 @@ import WTVarList from '@/components/variableList/WTVarList.vue'
 import WTVarListItem from '@/components/variableList/WTVarListItem.vue'
 import { ExerciseManager } from '@/utils/ExerciseManager'
 import { UserManager } from '@/utils/UserManager'
-import { _getExerciseById, _markExercise, _cancelMarkExercise } from '@/api/exercise'
+import { _getExerciseById, _subExercise } from '@/api/exercise'
 import { openFullscreen, closeFullscreen } from '@/utils/fullScreen'
 
 const state = reactive({
@@ -169,22 +170,12 @@ const isAuthor = computed(() => {
 })
 
 // 收藏动作
-const markExercise = async () => {
+const subExercise = async () => {
   if (!state.exercise) return
   try {
-    const { data: res } = await _markExercise(state.exercise._id)
-    if (res.meta.status === 200) state.exercise.isMarked = true
-  } catch (err) {
-    console.error(err)
-  } 
-}
-
-// 取消收藏动作
-const cancelMarkExercise = async () => {
-  if (!state.exercise) return
-  try {
-    const { data: res } = await _cancelMarkExercise(state.exercise._id)
-    if (res.meta.status === 200) state.exercise.isMarked = false
+    const t = state.exercise.isMarked ? -1 : 1
+    const { data: res } = await _subExercise(state.exercise._id, t)
+    if (res.meta.status === 200) state.exercise.isMarked = !state.exercise.isMarked
   } catch (err) {
     console.error(err)
   } 
@@ -221,10 +212,6 @@ const updateExercise = () => {
   }
   :deep(.tc-quote--title__prestyle)d {
     margin-bottom: 0 !important;
-  }
-
-  .action {
-    gap: 10px;
   }
 
   [content] {

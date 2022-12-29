@@ -59,7 +59,7 @@ const exercise = computed(() => store.workoutToAdd)
 
 // 从 store 中获取 workouts
 // UserManagement.loadWorkouts() 返回的是Promise
-const workouts = computed(() => UserManager.getWorkouts() || [])
+const workouts = computed(() => UserManager.getUserWorkouts() || [])
 
 onMounted(() => {
   if (!exercise.value) closeFullscreen('Training')

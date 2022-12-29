@@ -2,7 +2,7 @@ import { useStore } from '@/store/index'
 // import { FinishExerciseDTO } from './dtos';
 import { closeFullscreen, openFullscreen } from './fullScreen'
 import { _getWorkouts, _saveWorkout } from '@/api/workout'
-// import { TrainingStatistics } from './Trainingstatistics'
+import { UserManager } from '@/utils/UserManager'
 
 /**
  * 管理官方训练数据
@@ -38,18 +38,24 @@ export class WorkoutManager {
 export class RunningWorkout {
   static lsStats = 'running-workout-st' // Local_Storage_Stats
   static lsExerc = 'running-workout-ex' // Local_Storage_Exercise
+  static lsWId = 'running-workout-id' // Local_Storage_Workout_Id
   static lsStartTS = 'running-workout-ts' // Local_Storage_Start_Time_Str
 
-  static startWorkout (exercises) {
+  static startWorkout (exercises, workoutId = null) {
     // 判断是否登录
-    // if (!UserManagement.getUser()) return openFullscreen('login')
-    if (exercises && exercises.length > 0) {
-      // 数据保存到本地缓存
-      localStorage.setItem(this.lsStartTS, new Date().getTime().toString())
-      localStorage.setItem(this.lsExerc, JSON.stringify(exercises))
-      this.prepareStats(exercises)
-      openFullscreen('RunningWorkout')
-    }
+    if (!UserManager.getUserId()) return openFullscreen('login')
+    // 判断是否有 exercise
+    if (!exercises || exercises.length === 0) return console.error('no exercise')
+    // 判断是否有 workoutId
+    // 没有workoutId
+    if (workoutId) workoutId = -1
+    // 有workoutId
+    // 数据保存到本地缓存
+    localStorage.setItem(this.lsStartTS, new Date().getTime().toString())
+    localStorage.setItem(this.lsExerc, JSON.stringify(exercises))
+    localStorage.setItem(this.lsWId, JSON.stringify(workoutId))
+    this.prepareStats(exercises)
+    openFullscreen('RunningWorkout')
   }
 
   static prepareStats (exercises) {

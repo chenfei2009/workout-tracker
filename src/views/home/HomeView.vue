@@ -29,7 +29,6 @@
 <script setup>
 import { computed } from 'vue'
 import { useStore } from '@/store/index'
-
 import WTButton from '@/components/WTButton.vue'
 import WTTrainingPlan from '@/components/training/WTTrainingPlan.vue'
 import WTBanner from '@/components/WTBanner.vue'

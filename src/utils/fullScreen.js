@@ -18,7 +18,7 @@ export function openFullscreen (
     key: name,
     route: router.currentRoute.value
   })
-  console.log('跳转页面', name)
+  console.log('openFullscreen', name, router.currentRoute.value)
   router.push({ name, params, query })
   // if (destination || router.currentRoute.value.name !== name) {
   //   router.push({ name, params, query })
@@ -31,9 +31,10 @@ export function openFullscreen (
  * @param {Query} replaceQuery
  */
 export function closeFullscreen (fallback, replaceQuery = null) {
-  const key = router.currentRoute.value.name || ''
-  const storedRoute = { key: key, route: null }
-  // const storedRoute = { ...store.state.storedRoutes[key] }
+  // const key = router.currentRoute.value.name || ''
+  const store = useStore()
+  // const storedRoute = { key: key, route: null }
+  const storedRoute = store.storeRoute.route
 
   // store.commit('storeRoute', { key: key, route: null })
 

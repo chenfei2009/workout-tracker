@@ -31,7 +31,7 @@
             :exercise="e"
           >
             <template v-slot:action>
-              <a-button shape="round">开始训练</a-button>
+              <a-button shape="round" @click.stop="startWorkout(e)">开始训练</a-button>
             </template>
           </WTExercisePreview>
         </section>
@@ -55,6 +55,7 @@ import { useStore } from '@/store'
 import request from '@/utils/request'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTExercisePreview from '@/components/preview/WTExercisePreview.vue'
+import { RunningWorkout } from '@/utils/WorkoutManager'
 
 const selected = ref(-1)
 const isLoading = ref(false)
@@ -131,6 +132,11 @@ function submit () {
     .map(x => x.area)
     .join('&')
   loadExercises(headerRef.value.input.trim(), areasQuery)
+}
+
+const startWorkout = ex => {
+  if (!ex) return
+  RunningWorkout.startWorkout([ex], null)
 }
 </script>
 
