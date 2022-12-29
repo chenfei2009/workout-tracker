@@ -8,7 +8,7 @@
       <!-- <img border="rounded" :src="exercise.thumbnail" /> -->
       <div
         class="exercise-thumbnail"
-        :style="`background-image: url('${exercise.thumbnail}')`"
+        :style="`background-image: url('${exercise.thumbnail || 'public/pwa/splash/apple-splash-1334-750.jpg'}')`"
       />
     </div>
     <div class="information">
@@ -68,6 +68,7 @@ function getInfo (exercise) {
       width: 100px;
       height: 75px;
       background-size: cover;
+      background-position: center;
       border-radius: 2px;
     }
   }

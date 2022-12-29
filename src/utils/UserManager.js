@@ -1,7 +1,7 @@
 import { useStore } from '@/store/index'
 import request from '@/utils/request'
 import { USER } from '@/utils/constants'
-import { _getCreatedWorkouts, _markWorkout } from '@/api/workout'
+import { _getUserWorkouts } from '@/api/workout'
 
 export class UserManager {
   static getUserId () {
@@ -27,22 +27,22 @@ export class UserManager {
   /**
    * 管理用户个人训练数据
    */
-  static getCreatedWorkouts () {
+  static getUserWorkouts () {
     const store = useStore()
-    console.log('get user workouts from store', store.createdWorkouts)
-    return store.createdWorkouts
+    console.log('get user workouts from store', store.userWorkouts)
+    return store.userWorkouts
   }
 
-  static setCreatedWorkouts (workouts) {
+  static setUserWorkouts (workouts) {
     const store = useStore()
-    store.setCreatedWorkouts(workouts)
+    store.setUserWorkouts(workouts)
   }
 
-  static async loadCreatedWorkouts () {
+  static async loadUserWorkouts () {
     // if (!this.getWorkouts() && this.getUser())
-    if (!this.getCreatedWorkouts()) {
-      const { data } = await _getCreatedWorkouts(this.getUserId())
-      this.setCreatedWorkouts(data.data)
+    if (!this.getUserWorkouts()) {
+      const { data } = await _getUserWorkouts(this.getUserId())
+      this.setUserWorkouts(data.data)
     }
   }
 
@@ -51,10 +51,6 @@ export class UserManager {
   //   console.log('get user workouts from store', store.createdWorkouts)
   //   return store.createdWorkouts
   // }
-
-  static markWorkout (id, workout) {
-    _markWorkout(id, workout)
-  }
 
   /**
    * 管理用户计划数据

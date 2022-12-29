@@ -16,11 +16,10 @@ import router from '@/router'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTTabs from '@/components/WTTabs.vue'
 import WTExerciseForm from '@/components/forms/WTExerciseForm.vue'
-// import { ExerciseManagement } from '@/utils/ExerciseManagement';
+import { _getExerciseById } from '@/api/exercise'
 import { closeFullscreen } from '@/utils/fullScreen'
 // import { NotificationManagement } from '@/utils/NotificationManagement';
 // import { UserManagement } from '@/utils/UserManagement';
-import request from '@/utils/request'
 
 const tabs = ref(['基本信息', '目标容量', '更多信息'])
 const activeKey = ref(1)
@@ -33,15 +32,14 @@ function handleTabClick (value) {
   activeKey.value = value
 }
 
+const exId = router.currentRoute.value.params.id
+
 onMounted(() => {
-  const ID = router.currentRoute.value.params.id
   // 获取后台数据
-  request.get('exercise/' + ID)
+  _getExerciseById(exId)
     .then(res => {
       const exercise = res.data.data
-      if (!exercise || !exercise._id) {
-        return notFound()
-      }
+      if (!exercise || !exercise._id) return notFound()
       // if (exercise.author !== UserManagement.getUserID()) {
       //   return this.close({
       //     title: 'Berechtigungsfehler',
@@ -92,15 +90,15 @@ onMounted(() => {
 //   }
 // }
 
-function close (errorMessage) {
-  if (errorMessage) {
-    console.log('errorMessage', errorMessage)
+function close (errorMsg) {
+  if (errorMsg) {
+    console.log('error', errorMsg)
     // NotificationManagement.sendNotification(
     //   errorMessage.title,
     //   errorMessage.text
     // )
   }
-  closeFullscreen('Exercises')
+  closeFullscreen('ExerciseDetails')
 }
 
 function notFound () {

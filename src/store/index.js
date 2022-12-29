@@ -24,8 +24,8 @@ export const useStore = defineStore({
     cateWorkouts: null,
     trendingWorkouts: null,
     latestWorkouts: null,
-    // createdWorkouts: null, // 用户创建的训练
-    // markedWorkouts: null, // 用户收藏的训练
+    userWorkouts: null, // 用户创建的训练
+    subWorkouts: null, // 用户收藏的训练
 
     /* 训练相关 */
     runningExercise: null, // 进行中的动作
@@ -86,11 +86,11 @@ export const useStore = defineStore({
     setLatestWorkouts (arr) {
       this.latestWorkouts = arr
     },
-    setCreatedWorkouts (workouts) {
-      this.createdWorkouts = workouts
+    setUserWorkouts (workouts) {
+      this.userWorkouts = workouts
     },
-    setMarkedWorkouts (workouts) {
-      this.markedWorkouts = workouts
+    setSubdWorkouts (workouts) {
+      this.subWorkouts = workouts
     },
 
     // exercise 相关

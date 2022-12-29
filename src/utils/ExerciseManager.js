@@ -12,3 +12,5 @@ export class ExerciseManager {
     store.setWorkoutToAdd(ex)
   }
 }
+
+
