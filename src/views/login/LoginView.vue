@@ -79,7 +79,7 @@ import { reactive, computed, ref, onMounted } from 'vue'
 
 import WTSwipeable from '@/components/WTSwipeable.vue'
 import { closeFullscreen } from '@/utils/fullScreen'
-import { signIn, signUp, vertifyEmail } from '@/api/auth'
+import { AuthManager } from '@/utils/AuthManager'
 
 const formState = reactive({ // 测试账户
   email: '12345678@qq.com',
@@ -93,16 +93,14 @@ const errorMsg = ref('')
 const inputRef = ref(null)
 
 /* 登录表单提交事件 */
-const onSignIn = () => signIn(formState)
+const onSignIn = () => AuthManager.signIn(formState)
 
 /* 注册表单提交事件 */
-const onSignUp = () => signUp(formState)
+const onSignUp = () => AuthManager.signUp(formState)
 
-const onBlur = () => vertifyEmail(formState.email)
+const onBlur = () => AuthManager.vertifyEmail(formState.email)
 
-const disabled = computed(() => {
-  return !(formState.email && formState.password)
-})
+const disabled = computed(() => !(formState.email && formState.password))
 
 onMounted(() => inputRef.value.focus())
 
