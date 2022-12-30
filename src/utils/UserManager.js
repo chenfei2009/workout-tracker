@@ -2,6 +2,7 @@ import { useStore } from '@/store/index'
 import request from '@/utils/request'
 import { USER } from '@/utils/constants'
 import { _getUserWorkouts } from '@/api/workout'
+import { _getFullPlan } from '@/api/trainingplan'
 
 export class UserManager {
   static getUserId () {
@@ -62,7 +63,7 @@ export class UserManager {
   }
 
   static async loadTrainingPlan () {
-    const { data } = await request.get('trainingplan/full')
+    const { data } = await _getFullPlan()
     this.setTrainingPlan(data.data)
   }
 
@@ -72,6 +73,9 @@ export class UserManager {
     store.setTrainingPlan(plan)
   }
 
+  /**
+   * 管理用户个人动作数据
+   */
   static getExercises () {
     const store = useStore()
     console.log('get userExercises from store', store.exercises)

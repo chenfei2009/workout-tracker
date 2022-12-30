@@ -1,6 +1,6 @@
 import axios from 'axios'
 // import { cacheAdapterEnhancer } from 'axios-extensions'
-import { signOut } from '@/api/auth'
+import { AuthManager } from '@/utils/AuthManager'
 import { BASEURL, TOKEN, REFRESH_TOKEN } from './constants'
 import { useStore } from '@/store/index'
 
@@ -71,7 +71,7 @@ request.interceptors.response.use(
             console.log('token 刷新失败', error, authQueue)
             authQueue.length = 0 // 重新请求完清空
             // 退出登录
-            signOut()
+            AuthManager.signOut()
             return Promise.reject(error)
           })
           .finally(() => {
@@ -106,7 +106,7 @@ function refreshToken () {
   const oldRefreshToken = JSON.parse(localStorage.getItem(REFRESH_TOKEN))
   if (!oldRefreshToken) {
     // 退出登录
-    signOut()
+    AuthManager.signOut()
     throw new Error('本地找不到 refreshToken')
   }
   return axios.create({

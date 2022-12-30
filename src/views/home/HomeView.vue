@@ -8,7 +8,7 @@
           />
         </video>
       </template>
-      <div>发现更多训练</div>
+      <router-link :to="{name: 'Workouts'}">发现更多训练</router-link>
     </WTBanner>
 
     <div content>

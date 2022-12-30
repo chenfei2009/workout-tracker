@@ -20,36 +20,34 @@
       </div>
     </div>
 
+    <!-- 未登录 -->
+    <div v-if="status === -1" class="login" flow crusior @click="openFullscreen('Login')">
+      <span>您尚未登录</span>
+      <span>点击这里 查看或定制您的训练</span>
+    </div>
+
     <!-- 当日训练计划 -->
-    <div class="day-wrapper" v-if="UserManager.getUserId()">
+    <div class="day-wrapper" v-else>
       <transition name="fade">
         <WTTrainingPlanDay
           :key="selected"
           :daynumber="selected"
+          :isLoading="status === 0 ? true : false"
         />
-        <!-- <WTTrainingPlanDay
-          :key="selected"
-          :daynumber="selected"
-          :day="getDayPlan(selected)"
-        /> -->
       </transition>
-    </div>
-
-    <!-- 未登录 -->
-    <div v-else class="login" flow crusior @click="router.push('/login')">
-      <span>您尚未登录</span>
-      <span>点击这里 查看或定制您的训练</span>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import router from '@/router'
-import WTTrainingPlanDay from './WTTrainingPlanDay.vue'
+import { computed, onMounted, ref } from 'vue'
+import WTTrainingPlanDay from '@/components/training/WTTrainingPlanDay.vue'
 import WTHeading from '@/components/WTHeading.vue'
 import { UserManager } from '@/utils/UserManager'
 import { aDay, DAYS } from '@/utils/constants'
+import { openFullscreen } from '@/utils/fullScreen'
+
+const status = ref(0) // -1 未登录 // 0 loading // 1 loaded
 
 const dayNames = ref(DAYS)
 
@@ -64,13 +62,7 @@ const days = computed(() => {
   return days
 })
 
-const plan = computed(() => {
-  if (!UserManager.getTrainingPlan()) {
-    console.log('loadTrainingPlan')
-    UserManager.loadTrainingPlan()
-  }
-  return UserManager.getTrainingPlan()
-})
+const plan = computed(() => UserManager.getTrainingPlan())
 
 const hasExercises = day => {
   // const plan = UserManager.getTrainingPlan()
@@ -95,6 +87,18 @@ const hasExercises = day => {
 // const dayPlan = computed(() => getDayPlan(selected.value) )
 
 const getDateInXDays = days => (new Date(new Date().getTime() + days * aDay).getDate())
+
+onMounted(async () => {
+  if (!UserManager.getUserId()) {
+    status.value = -1
+    return console.log('游客模式')
+  }
+  if (!plan.value) {
+    status.value = 0
+    await UserManager.loadTrainingPlan()
+    status.value = 1
+  }
+})
 </script>
 
 <style lang="less" scoped>

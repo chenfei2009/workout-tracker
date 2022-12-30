@@ -40,7 +40,6 @@
 
 <script setup>
 import { computed } from 'vue'
-
 // import request from '@/utils/request'
 import { DAYS } from '@/utils/constants'
 // import { openFullscreen } from '@/utils/fullScreen'
@@ -52,20 +51,18 @@ import WTCarousel from '../WTCarousel.vue'
 import WTHeading from '../WTHeading.vue'
 
 const props = defineProps({
-  daynumber: Number
+  daynumber: Number,
+  isLoading: Boolean
 })
 
 // const actionActive = ref(false)
-
-const isLoading = computed(() => 
-  UserManager.getUserId() && !UserManager.getTrainingPlan()
-)
+// const isLoading = ref(true)
+// defineExpose('isLoading')
 
 // const day = computed((id, exercise) => {})
 const day = computed(() => {
   if (props.daynumber === undefined) return null
   const plan = UserManager.getTrainingPlan()
-  console.log('plan', plan)
   if (!plan) return null
   for (const [key, value] of Object.entries(plan)) {
     // 此处暂时用虚拟数据
@@ -81,21 +78,6 @@ const amount = computed(() => {
   const { length } = day.value
   return length + '个训练计划'
 })
-
-// function startWorkout () {
-//   if (!day.value) return
-//   const info = day.value.exercises.map(ex => {
-//     return {
-//       affectedMuscles: ex.affectedMuscles,
-//       difficulty: ex.difficulty,
-//       thumbnail: ex.thumbnail,
-//       title: ex.title,
-//       type: ex.distance ? 'distance' : ex.sets ? 'gym' : 'time',
-//       _id: ex._id
-//     }
-//   })
-//   WorkoutManagement.startWorkout(info)
-// }
 
 // function updateDay () {
 //   openFullscreen('UpdateTrainingPlan', { day: '' + props.daynumber })
