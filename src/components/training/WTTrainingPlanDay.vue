@@ -7,11 +7,14 @@
     <div class="exercises" v-else>
       <div class="title-wrap">
         <WTHeading :subtitle="amount || '无需练习'" :title="dayName" :seeMore="false" />
-        <!-- <div class="btn-wrap">
-          <a-button @click="startWorkout"><span class="iconfont icon-right"></span></a-button>
-          <a-button @click="updateDay"><span class="iconfont icon-edit"></span></a-button>
-          <a-button @click="removeDay"><span class="iconfont icon-delete"></span></a-button>
-        </div> -->
+        <div v-if="actions" class="btn-wrap">
+          <a-button size="small" @click="updateDay">
+            <span class="iconfont icon-edit"></span>
+          </a-button>
+          <a-button size="small" @click="removeDay">
+            <span class="iconfont icon-delete"></span>
+          </a-button>
+        </div>
       </div>
       <template v-if="day">
         <WTCarousel>
@@ -25,12 +28,10 @@
       <template v-else>
         <div class="media-wrap">
           <div class="action-wrap">
-            <span>+ 添加训练</span>
+            <span @click.stop="updateDay">+ 添加训练</span>
           </div>
           <video playsinline autoplay="autoplay" loop muted>
-            <source
-              src="https://assets.mixkit.co/videos/preview/mixkit-athlete-working-out-with-heavy-ropes-in-the-gym-23141-small.mp4"
-            />
+            <source :src="PLAN_BG" />
           </video>
         </div>
       </template>
@@ -41,9 +42,8 @@
 <script setup>
 import { computed } from 'vue'
 // import request from '@/utils/request'
-import { DAYS } from '@/utils/constants'
-// import { openFullscreen } from '@/utils/fullScreen'
-
+import { DAYS, PLAN_BG } from '@/utils/constants'
+import { openFullscreen } from '@/utils/fullScreen'
 import { UserManager } from '@/utils/UserManager'
 // import { WorkoutManager } from '@/utils/WorkoutManager'
 import WTWorkoutPreview from '@/components/preview/WTWorkoutPreview.vue'
@@ -52,7 +52,14 @@ import WTHeading from '../WTHeading.vue'
 
 const props = defineProps({
   daynumber: Number,
-  isLoading: Boolean
+  isLoading: {
+    type: Boolean,
+    default: false
+  },
+  actions: {
+    type: Boolean,
+    default: false
+  }
 })
 
 // const actionActive = ref(false)
@@ -79,17 +86,16 @@ const amount = computed(() => {
   return length + '个训练计划'
 })
 
-// function updateDay () {
-//   openFullscreen('UpdateTrainingPlan', { day: '' + props.daynumber })
-// }
+const updateDay = () => openFullscreen('UpdateTrainingPlan', { day: '' + props.daynumber })
 
-// async function removeDay () {
-//   if (actionActive.value) return
-//   actionActive.value = true
-//   const { data } = await request.delete('trainingplan/' + props.daynumber)
-//   UserManagement.setTrainingPlan(data)
-//   actionActive.value = false
-// }
+const removeDay = () => {
+  console.log('removeDay', props.daynumber)
+  // if (actionActive.value) return
+  // actionActive.value = true
+  // const { data } = await request.delete('trainingplan/' + props.daynumber)
+  // UserManagement.setTrainingPlan(data)
+  // actionActive.value = false
+}
 </script>
 
 <style lang="less" scoped>
@@ -134,9 +140,14 @@ const amount = computed(() => {
     transform: translate(-50%, -50%);
     font-size: 1.4rem;
     color: #fff;
+    z-index: 9;
   }
   video {
     width: 100%;
   }
+}
+
+.ant-btn {
+  opacity: 0.6;
 }
 </style>

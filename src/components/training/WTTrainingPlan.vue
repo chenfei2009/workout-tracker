@@ -32,7 +32,7 @@
         <WTTrainingPlanDay
           :key="selected"
           :daynumber="selected"
-          :isLoading="status === 0 ? true : false"
+          :isLoading="status === 0"
         />
       </transition>
     </div>
@@ -47,7 +47,7 @@ import { UserManager } from '@/utils/UserManager'
 import { aDay, DAYS } from '@/utils/constants'
 import { openFullscreen } from '@/utils/fullScreen'
 
-const status = ref(0) // -1 未登录 // 0 loading // 1 loaded
+const status = ref(1) // -1 未登录 // 0 loading // 1 loaded
 
 const dayNames = ref(DAYS)
 
@@ -93,6 +93,7 @@ onMounted(async () => {
     status.value = -1
     return console.log('游客模式')
   }
+  console.log(plan.value)
   if (!plan.value) {
     status.value = 0
     await UserManager.loadTrainingPlan()
