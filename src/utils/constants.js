@@ -18,3 +18,6 @@ export const REFRESH_TOKEN = 'workout_tracker_refresh_token'
 
 export const AREAS = ['胸', '背', '臀腿', '肩', '二头', '三头', '核心', '全身' ]
 export const MUSCLES = ['上胸', '中下胸', '前束', '中束', '背部', '下背', '二头', '三头', '腹肌', '臀大肌', '股四头肌', '腘绳肌']
+
+export const HOME_BG = ''
+export const PLAN_BG = 'https://assets.mixkit.co/videos/preview/mixkit-athlete-working-out-with-heavy-ropes-in-the-gym-23141-small.mp4'

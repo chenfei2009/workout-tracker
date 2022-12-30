@@ -1,146 +1,81 @@
 <template>
   <div class="view-update-training-plan">
+    <PageHeader :title="'UpdatePlan' + dayName"/>
+
     <div content max-width>
-      <WTHeader title="TrainingPlan">
-        FHFullScreenCloser
-        <!-- <FHFullScreenCloser @click="close" /> -->
-      </WTHeader>
-      <br />
-      <h1 center>TrainingPlan</h1>
-      <h3 center>{{ dayName }}</h3>
-
-      <template v-if="currentExercise">
-        <!-- <tc-divider :dark="true" /> -->
-        <a-divider />
-        <h3 center>current exercise</h3>
-        <div class="workout-exercise-preview">
-          <!-- <a-avatar :src="currentExercise.thumbnail" /> -->
-          <img :src="currentExercise.thumbnail" />
-          <div class="title">{{ currentExercise.title }}</div>
+      <div class="exercises">
+        <div class="title-wrap">
+          <WTHeading :subtitle="amount || '无需练习'" :title="dayName" :seeMore="false" />
         </div>
-      </template>
-
-      <template v-if="currentWorkout">
-        <!-- <tc-divider :dark="true" /> -->
-        <a-divider />
-        <h3 center>Aktuelles Workout</h3>
-        <div class="workout-exercise-preview">
-          <!-- <WTWorkoutThumbnail :exercises="currentWorkout.exercises" /> -->
-          <div class="title">{{ currentWorkout.title }}</div>
+        <template v-if="day">
+          <WTWorkoutPreview
+            v-for="w in day"
+            :key="w._id"
+            :workout="w"
+          />
+        </template>
+        <div v-if="actions" class="btn-wrap">
+          <a-button size="small" @click="updateDay">
+            <span class="iconfont icon-edit"></span>
+          </a-button>
+          <a-button size="small" @click="removeDay('123456')">
+            <span class="iconfont icon-delete"></span>
+          </a-button>
         </div>
-      </template>
-
-      <br />
-
-      <a-tabs v-model:activeKey="activeKey">
-        <a-tab-pane key="1" tab="Workout" />
-        <a-tab-pane key="2" tab="Exercise" />
-      </a-tabs>
-
-      <WTTransition>
-        <div class="workouts" v-if="activeKey === '1'">
-          <div flow>
-            <h3>Choose workout</h3>
-            <a-button @click="openFullscreen('CreateWorkout')">
-              <span class="iconfont icon-plus"></span>create
-            </a-button>
-          </div>
-          <WTList v-if="workouts">
-            <WTListItem
-              v-for="w in workouts"
-              :key="'w' + w._id"
-              :avatar="w.exercises[0].thumbnail"
-              :title="w.title"
-              :subtitle="getWorkoutSubtitle(w)"
-            >
-              <a-button @click="updateDay(w._id)">
-                <span class="iconfont icon-plus"></span>
-                create
-              </a-button>
-            </WTListItem>
-          </WTList>
-        </div>
-      </WTTransition>
-
-      <WTTransition>
-        <div class="exercises" v-if="activeKey === '2'">
-          <div flow>
-            <h3>Exercise</h3>
-            <form @submit.prevent="submit">
-              <a-input
-                v-model:value="query"
-                placeholder="Find exercise"
-                @input="submit"
-              />
-              <!-- <a-input
-                pattern=".{2,}"
-                v-model="query"
-                icon="lens"
-                :frosted="true"
-                :dark="true"
-                placeholder="Find exercise"
-                @input="submit"
-              /> -->
-            </form>
-          </div>
-
-          <WTList>
-            <WTListItem
-              v-for="e in results || []"
-              :key="'e' + e._id"
-              :avatar="e.thumbnail"
-              :title="e.title"
-            >
-              <a-button
-                :disabled="submitting"
-                icon="dot"
-                @click="updateDay('ex_' + e._id)"
-              />
-            </WTListItem>
-          </WTList>
-        </div>
-      </WTTransition>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import router from '@/router'
 
-import WTTransition from '@/components/WTTransition.vue'
-// import WTFullScreenCloser from '@/components/WTFullScreenCloser.vue'
-import WTHeader from '@/components/WTHeader.vue'
-import WTList from '@/components/list/WTList.vue'
-import WTListItem from '@/components/list/WTListItem.vue'
-// import WTWorkoutThumbnail from '@/components/training/WTWorkoutThumbnail.vue'
-import request from '@/utils/request'
+import PageHeader from '@/components/common/PageHeader.vue'
+import WTWorkoutPreview from '@/components/preview/WTWorkoutPreview.vue'
+import WTHeading from '@/components/WTHeading.vue'
+// import request from '@/utils/request'
 import { DAYS } from '@/utils/constants'
-import { openFullscreen, closeFullscreen } from '@/utils/fullScreen'
+// import { closeFullscreen } from '@/utils/fullScreen'
 import { UserManager } from '@/utils/UserManager'
-import { WorkoutManager } from '@/utils/WorkoutManager'
+// import { WorkoutManager } from '@/utils/WorkoutManager'
 
-const activeKey = ref('1')
-const submitting = ref(false)
-const query = ref('')
+// const submitting = ref(false)
+// const query = ref('')
 
-const results = ref(null)
+// const results = ref(null)
 
-async function submit () {
-  if (query.value.length < 2) return
-  const { data } = await request.get(
-    'exercise/find/' + encodeURI(query.value)
-  )
-  results.value = data.data
-}
+// async function submit () {
+//   if (query.value.length < 2) return
+//   const { data } = await request.get(
+//     'exercise/find/' + encodeURI(query.value)
+//   )
+//   results.value = data.data
+// }
 
+// const day = computed(() => {
+//   const day = router.currentRoute.value.params.day
+//   if (!day) close()
+//   if (isNaN(+day)) close()
+//   const dayNumb = +day
+//   if (dayNumb < 0 || dayNumb > 6) close()
+//   return dayNumb
+// })
 const day = computed(() => {
   const day = router.currentRoute.value.params.day
-  if (!day) close()
-  if (isNaN(+day)) close()
-  const dayNumb = +day
-  if (dayNumb < 0 || dayNumb > 6) close()
-  return dayNumb
+  const plan = UserManager.getTrainingPlan()
+  if (!plan) return null
+  for (const [key, value] of Object.entries(plan)) {
+    // 此处暂时用虚拟数据
+    if (day.toString() === key) return value
+  }
+  return null
+})
+
+const amount = computed(() => {
+  if (!day.value) return null
+  const { length } = day.value
+  return length + '个训练计划'
 })
 
 const dayName = computed(() => {
@@ -149,50 +84,36 @@ const dayName = computed(() => {
 })
 
 // { id: string; exercises: IExercise[] } | null
-const trainingplanDay = computed(() => {
-  const plan = UserManager.getTrainingPlan()
-  if (!plan) return null
-  for (const [key, value] of Object.entries(plan)) {
-    if (day.value.toString() === key) return value
-  }
-  return null
-})
-
-const currentExercise = computed(() => {
-  const plan = trainingplanDay.value
-  if (!plan) return null
-  // if (!day.id.startsWith('ex_')) return null
-  // return day.exercises[0]
-  return plan
-})
-
-const currentWorkout = computed(() => {
-  const plan = trainingplanDay.value
-  if (!plan) return null
-  // if (day.id.startsWith('ex_')) return null
-  // return UserManagement.getWorkout(day.id)
-  return UserManager.getWorkout(0)
-})
-
-const workouts = computed(() => WorkoutManager.getWorkouts())
-
-function getWorkoutSubtitle (workout) {
-  const { length } = workout.exercises
-  if (length === 1) return 'Eine Übung'
-  return length + ' Übungen'
-}
+// const trainingplanDay = computed(() => {
+//   const plan = UserManager.getTrainingPlan()
+//   if (!plan) return null
+//   for (const [key, value] of Object.entries(plan)) {
+//     if (day.value.toString() === key) return value
+//   }
+//   return null
+// })
 
 async function updateDay (id) {
-  if (!id) return
-  if (submitting.value) return
-  submitting.value = true
-  const { data } = await request.put('trainingplan/' + this.day + '/' + id)
-  UserManager.setTrainingPlan(data)
-  close()
+  console.log(id)
+  // if (!id) return
+  // if (submitting.value) return
+  // submitting.value = true
+  // const { data } = await request.put('trainingplan/' + this.day + '/' + id)
+  // UserManager.setTrainingPlan(data)
+  // close()
 }
 
-function close () {
-  closeFullscreen('TrainingPlan')
+// function close () {
+//   closeFullscreen('TrainingPlan')
+// }
+
+const removeDay = () => {
+  console.log('removeDay')
+  // if (actionActive.value) return
+  // actionActive.value = true
+  // const { data } = await request.delete('trainingplan/' + props.daynumber)
+  // UserManagement.setTrainingPlan(data)
+  // actionActive.value = false
 }
 
 </script>
@@ -200,15 +121,15 @@ function close () {
 <style lang="less" scoped>
 .view-update-training-plan {
   min-height: 100vh;
-  color: #fff;
+  // color: #fff;
 
-  background: linear-gradient(rgba(@color, 0.6), rgba(@color, 0.2)),
-    url('/public/assets/workout-bg.webp');
+  // background: linear-gradient(rgba(@color, 0.6), rgba(@color, 0.2)),
+  //   url('/public/assets/workout-bg.webp');
   background-size: cover;
   background-position: center center;
 
   [content] {
-    padding-bottom: 20px;
+    padding-top: 70px;
   }
 
   .workout-exercise-preview {
