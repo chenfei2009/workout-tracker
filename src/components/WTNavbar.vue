@@ -1,124 +1,116 @@
 <template>
-  <tc-navbar :moveout="$route.meta.fullscreen" :dark="$store.getters.darkmode">
-    <b slot="logo">{{ $route.meta.hero }}</b>
-    <tc-navbar-item
-      tfcolor="success"
-      icon="house"
-      name="Start"
-      routeName="home"
-    />
+  <!-- :dark="$store.getters.darkmode" -->
+  <div
+    flow
+    class="wt-nav-bar"
+    :fadeout="router.currentRoute.value.meta.fullscreen"
+  > 
+    <div class="left" flow>
+      <object data="pwa/maskIcon.svg" type="image/svg+xml" />
+      <span>健身记录助手</span>
+    </div>
+    <!-- <b v-slot:"logo">{{ $route.meta.hero }}</b> -->
+    <div class="right" flow>
+      <!-- 发现训练 -->
+      <div class="nav-bar-item" @click="router.push('/workouts')">
+        <span class="iconfont icon-share"></span>
+        <span>发现</span>
+      </div>
 
-    <tl-flow>
-      <tc-navbar-item
-        tfcolor="success"
-        icon="star"
-        name="Feed"
-        routeName="community"
-      />
-      <div class="badge" v-if="$store.getters.unreadPosts > 0">
-        {{ $store.getters.unreadPosts }}
+      <!-- 动作库 -->
+      <div class="nav-bar-item" @click="router.push('/exercises')">
+        <span class="iconfont icon-menu"></span>
+        <span>动作</span>
       </div>
-    </tl-flow>
-    <tc-navbar-item
-      tfcolor="success"
-      icon="gym"
-      name="Training"
-      routeName="training"
-    />
-    <tc-navbar-item
-      tfcolor="success"
-      icon="apple-alt"
-      name="Ernährung"
-      routeName="nutrition"
-    />
-    <tl-flow v-if="!$store.getters.valid">
-      <tc-button
-        variant="filled"
-        tfbackground="success"
-        name="Login"
-        icon="login"
-        @click="$oFS('login')"
-      />
-    </tl-flow>
-    <tl-flow v-else>
-      <div @click="navProfile">
-        <tl-flow class="account" cursor>
-          <tc-avatar :src="$store.getters.user.avatar" />
-          <div class="name" :active="$route.name === 'profile'">Profil</div>
-          <div class="badge" v-if="profileNotifications > 0">
-            {{ profileNotifications }}
-          </div>
-        </tl-flow>
+
+      <!-- 首页 -->
+      <div class="nav-bar-item" @click="router.push('/home')">
+        <span class="iconfont icon-home"></span>
+        <span>开始</span>
       </div>
-    </tl-flow>
-  </tc-navbar>
+
+      <!-- 数据 -->
+      <div class="nav-bar-item" @click="router.push('/stats')">
+        <span class="iconfont icon-menu"></span>
+        <span>数据</span>
+      </div>
+
+      <!-- 我的 -->
+      <div class="nav-bar-item" v-if="isUserValid" @click="router.push('/profile')">
+        <span class="iconfont icon-user"></span>
+        <span>我的</span>
+      </div>
+
+      <!-- 登录 -->
+      <div class="nav-bar-item" v-else @click="openFullscreen('login')">
+        <span class="iconfont icon-user"></span>
+        <span>登录</span>
+      </div>
+    </div>
+  </div>
 </template>
 
-<script lang="ts">
-import { NotificationManagement } from '@/utils/NotificationManagement';
-import { Vue, Component } from 'vue-property-decorator';
+<script setup>
+import router from '@/router'
+import { openFullscreen } from '@/utils/fullScreen'
+import { computed } from 'vue'
+// import { NotificationManagement } from '@/utils/NotificationManagement'
 
-@Component
-export default class FHNavbar extends Vue {
-  public navProfile(): void {
-    if (this.$route.name !== 'profile') this.$router.push({ name: 'profile' });
-  }
+const isUserValid = computed(() => true)
 
-  get profileNotifications(): number {
-    return NotificationManagement.getTotalNotifications();
-  }
-}
+// const navProfile = () => {
+//   if (router.currentRoute.value.name !== 'profile') router.push({ name: 'profile' })
+// }
+
+// const profileNotifications = () => NotificationManagement.getTotalNotifications()
 </script>
 
-<style lang="scss" scoped>
-.tc-navbar {
-  @media #{$isMobile} {
+<style lang="less" scoped>
+.wt-nav-bar {
+  @isMobile: ~"only screen and (max-width: 850px)";
+  @media @isMobile {
     display: none !important;
   }
-
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background-color: @background_dark;
+  // opacity: 0.7;
+  color: #fff;
+  z-index: 999;
+  padding: 0 20px;
   transition: all 0.5s ease-in-out !important;
-  &[moveout] {
+  &[fadeout] {
     transition-delay: 0.3s !important;
     transform: translateY(calc(-50px - env(safe-area-inset-bottom)));
     opacity: 0;
   }
-
-  .account {
-    padding: 0 5px;
-    border-left: 1px solid rgba(#fff, 0.2);
-    padding-left: 10px;
-
-    &:hover .name {
-      opacity: 1;
-    }
-
-    .tc-avatar {
-      height: 30px;
-      width: 30px;
-      margin-right: 10px;
-    }
-    .name {
-      margin-right: 5px;
-      padding-right: 5px;
-      opacity: 0.5;
-      transition: 0.2s ease-in-out;
-      &[active] {
-        opacity: 1;
-      }
+  .left {
+    height: 80px;
+    align-items: center;
+    font-size: 24px;
+    // font-weight: 700;
+    font-family: 'Microsoft JhengHei';
+    // font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    object {
+      width: 60px;
+      height: 60px;
+      // scale: 0.5;
     }
   }
-  .badge {
-    font-size: 12px;
-    color: #fff;
-    $scale: 20px;
-    height: $scale;
-    padding: 0px #{$scale / 3};
-    min-width: #{$scale / 3};
-    border-radius: $scale;
-    line-height: $scale;
-    text-align: center;
-    background: $success;
-    margin: 0 5px;
+  .right {
+    font-size: 16px;
+    gap: 20px;
+    .nav-bar-item {
+      cursor: pointer;
+      span {
+        margin-left: 5px;
+      }
+    }
   }
 }
 </style>

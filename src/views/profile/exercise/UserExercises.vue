@@ -21,7 +21,7 @@
 import { computed, onMounted, ref } from 'vue'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTTabs from '@/components/WTTabs.vue'
-import WTExercisePreview from '@/components/training/WTExercisePreview.vue'
+import WTExercisePreview from '@/components/preview/WTExercisePreview.vue'
 import { UserManager } from '@/utils/UserManager'
 
 // const activeKey = ref(1) // -1

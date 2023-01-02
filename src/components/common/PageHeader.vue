@@ -60,6 +60,11 @@ defineExpose({
   background-color: @background;
   box-shadow: 2px 2px 2px rgba(0,0,0,0.1);
   font-size: 1.2rem;
+
+  @media only screen and (min-width: 851px) {
+    margin-top: 80px;
+  }
+
   .main {
     height: 50px;
     display: flex;

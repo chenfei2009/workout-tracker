@@ -3,7 +3,7 @@
     <!-- 搜索表头 -->
     <PageHeader title="动作库" :search="true" ref="headerRef" @submit="submit" />
 
-    <div content>
+    <div content max-width>
       <!-- 侧边栏 -->
       <aside>
         <ul>
@@ -143,6 +143,11 @@ const startWorkout = ex => {
 <style lang="less" scoped>
 [content] {
   margin: 50px 0;
+  height: 100%;
+  @media only screen and (min-width: 851px) {
+    margin: 130px auto;
+  }
+
   .title {
     font-size: 1.2rem;
     font-weight: 600;
@@ -155,9 +160,14 @@ const startWorkout = ex => {
     bottom: 50px;
     left: 0;
     width: 60px;
-    padding: 20px 0;
+    // padding: 20px 0;
+    @media only screen and (min-width: 851px) {
+      top: 132px;
+      left: 5px;
+    }
     ul {
       li {
+        white-space: nowrap;
         padding: 10px;
       }
     }

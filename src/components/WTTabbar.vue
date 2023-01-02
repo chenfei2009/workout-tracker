@@ -82,9 +82,16 @@ const store = useStore()
 
 <style lang="less" scoped>
 .wt-tabbar {
-  @media (@isDesktop) {
+  @isDesktop: ~"only screen and (min-width: 851px)";
+  @media @isDesktop {
     display: none !important;
   }
+  // @media only screen and(min-width: 851px) {
+  //   display: none !important;
+  // }
+  // @media (@isDesktop) {
+  //   display: none !important;
+  // }
   transition: all 0.5s ease-in-out !important;
   &[fadeout] {
     transform: translateY(calc(50px + env(safe-area-inset-bottom)));

@@ -87,5 +87,8 @@ onMounted(async () => {
 <style lang="less" scoped>
 [content] {
   padding-top: 90px;
+  @media only screen and (min-width: 851px) {
+    padding-top: 150px;
+  }
 }
 </style>

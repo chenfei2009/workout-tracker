@@ -1,6 +1,6 @@
 <template>
   <div class="view-profile">
-    <div max-width>
+    <div class="card-wrap" max-width>
       <!-- 瀑布流 -->
       <!-- <masonry :cols="{ default: 2, 600: 1 }" gutter="20px"> -->
       <a-card title="训练">
@@ -29,20 +29,33 @@
         <a-list item-layout="horizontal">
           <a-list-item><span>系统设置</span></a-list-item>
         </a-list>
+        <a-list item-layout="horizontal">
+          <a-list-item class="signout-btn" @click="AuthManager.signOut">
+            <span>退出登录</span>
+          </a-list-item>
+        </a-list>
       </a-card>
-      <br>
-      <a-card title="退出登录" class="signout-btn" @click="signOut"></a-card>
     </div>
   </div>
 </template>
 
 <script setup>
-import { signOut } from '@/api/auth.js'
+import { AuthManager } from '@/utils/AuthManager.js'
 </script>
 
 <style lang="less" scoped>
- .ant-card {
-   border-radius: @border-radius;
-   background-color: rgba(255, 255, 255, 0.5);
- }
+.card-wrap {
+  @media only screen and (min-width: 851px) {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    .ant-card {
+      flex: 1;
+    }
+  }
+}
+.ant-card {
+  border-radius: @border-radius;
+  background-color: rgba(255, 255, 255, 0.5);
+}
 </style>

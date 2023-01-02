@@ -20,6 +20,12 @@ const onTabClick = activeKey => emit('switch', activeKey)
 </script>
 
 <style lang="less" scoped>
+@media only screen and (min-width: 851px) {
+  :deep(.ant-tabs-nav) {
+    display: none;
+  }
+}
+
 :deep(.ant-tabs-nav) {
   margin-bottom: 0;
 }

@@ -26,41 +26,49 @@ defineProps({
   subTitle: String,
   height: {
     type: Number,
-    default: 300
+    default: -1
   }
 })
 
 const emit = defineEmits(['click'])
 
-function clicked (e) {
-  emit('click', e)
-}
-
+const clicked = e => emit('click', e)
 </script>
 
 <style lang="less" scoped>
 .wt-banner {
   position: relative;
-  // height: fit-content;
+  height: fit-content;
   cursor: pointer;
 
-  @media only screen and(max-width: 599px) {
+  @media only screen and (max-width: 850px) {
     width: 100vw;
-    max-width: 600px;
+    // max-width: 600px;
+    .media-mobile {
+      // height: fit-content;
+      min-height: 300px;
+    }
     .media-deskstop {
       display: none;
     }
   }
 
-  @media only screen and(min-width: 600px) {
-    height: 300px;
+  @media only screen and (min-width: 851px) {
+    // width: 100vw;
+    // .media-deskstop {
+    //   display: none;
+    // }
+    // 485-80
+    height: 380px;
+    // margin-top: 80px;
     overflow: hidden;
     .media-mobile {
       display: none;
     }
     .media-deskstop {
       width: 100vw;
-      // height: 200px;
+      // height: 300px;
+      // padding-top: 80px;
       img {
         width: 100%;
       }
@@ -68,11 +76,12 @@ function clicked (e) {
   }
 
   .media-deskstop, .media-mobile {
-    overflow: hidden;
+    // overflow: hidden;
     :deep(img),
-    :deep(vide) {
+    :deep(video) {
       height: 100%;
-      width: 100%;
+      min-height: 300px;
+      width: 100vw;
       object-fit: cover;
     }
   }
