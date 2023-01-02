@@ -1,6 +1,6 @@
 <template>
   <WTTabbar />
-  <!-- <WTNavbar /> -->
+  <WTNavbar />
   <!-- <WTRouter /> -->
   <router-view/>
   <!-- <nav>
@@ -11,9 +11,10 @@
 </template>
 
 <script setup>
-// import WTNavbar from './components/WTNavbar.vue'
-// import WTRouter from './components/WTRouter.vue'
+import WTNavbar from './components/WTNavbar.vue'
 import WTTabbar from './components/WTTabbar.vue'
+// import WTRouter from './components/WTRouter.vue'
+
 </script>
 
 <style lang="less">
@@ -73,6 +74,9 @@ body {
   padding-right: calc(5vw + env(safe-area-inset-right));
   // @media #{$isMobile} {
   //   padding-bottom: calc(70px + env(safe-area-inset-bottom));
+  // }
+  // @media only screen and (min-width: 851px) {
+  //   padding-top: 130px;
   // }
 }
 

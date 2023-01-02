@@ -48,7 +48,7 @@ header {
   // background-color: rgba(0,0,0,0.3);
   .header-media {
     width: 100vw;
-    height: 300px;
+    // height: 300px;
     video {
       height: 100%;
     }

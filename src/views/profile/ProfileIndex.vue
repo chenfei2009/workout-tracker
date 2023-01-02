@@ -21,5 +21,8 @@ import PageHeader from '@/components/common/PageHeader.vue'
 <style lang="less" scoped>
 [content] {
   margin: 50px 0;
+  @media only screen and (min-width: 851px) {
+    margin-top: 130px;
+  }
 }
 </style>

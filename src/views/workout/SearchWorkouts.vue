@@ -89,7 +89,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import request from '@/utils/request'
-import WTWorkoutPreview from '@/components/training/WTWorkoutPreview.vue'
+import WTWorkoutPreview from '@/components/preview/WTWorkoutPreview.vue'
 
 const input = ref('')
 const isShowInput = ref(false)
