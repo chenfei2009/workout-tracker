@@ -62,6 +62,7 @@ const clicked = e => emit('click', e)
     height: 380px;
     // margin-top: 80px;
     overflow: hidden;
+    z-index: 0;
     .media-mobile {
       display: none;
     }

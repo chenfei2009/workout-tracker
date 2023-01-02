@@ -215,8 +215,6 @@ const updateExercise = () => {
   }
 
   [content] {
-    // padding-top: 0;
-
     .quick-information {
       display: flex;
       justify-content: space-around;

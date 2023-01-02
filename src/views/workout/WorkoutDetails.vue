@@ -45,7 +45,7 @@ import router from '@/router'
 import WTSwipeable from '@/components/WTSwipeable.vue'
 import WTExercisePreview from '@/components/preview/WTExercisePreview.vue'
 import WTBanner from '@/components/WTBanner.vue'
-import request from '@/utils/request'
+import { _getWorkoutById } from '@/api/workout'
 import {
   closeFullscreen
   // formatTimeForMessage
@@ -69,8 +69,7 @@ const state = reactive({
 // const id = router.currentRoute.value.params.id
 
 onMounted(() => {
-  request
-    .get('workout/' + router.currentRoute.value.params.id)
+  _getWorkoutById(router.currentRoute.value.params.id)
     .then(async res => {
       state.workout = res.data.data
       if (!state.workout) return
