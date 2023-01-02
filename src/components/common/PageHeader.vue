@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="header" :class="{'fullscreen': router.currentRoute.value.meta.fullscreen}">
     <div class="main" v-if="!isShowInput">
       <div class="title">{{title}}</div>
       <span v-if="search" class="iconfont icon-search" @click="searchBtnClick" />
@@ -19,6 +19,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import router from '@/router'
+
 defineProps({
   title: String,
   search: {
@@ -27,24 +29,19 @@ defineProps({
   }
 })
 
-const emit = defineEmits(['submit'])
-
 const input = ref('')
+defineExpose({ input })
+
 const isShowInput = ref(false)
 
-function searchBtnClick () {
+const searchBtnClick = () => {
   if (!isShowInput.value) {
     isShowInput.value = true
   }
 }
 
-function submit () {
-  emit('submit')
-}
-
-defineExpose({
-  input
-})
+const emit = defineEmits(['submit'])
+const submit = () => emit('submit')
 </script>
 
 <style lang="less" scoped>
@@ -61,9 +58,14 @@ defineExpose({
   box-shadow: 2px 2px 2px rgba(0,0,0,0.1);
   font-size: 1.2rem;
 
-  @media only screen and (min-width: 851px) {
-    margin-top: 80px;
+  &:not(.fullscreen) {
+    @media only screen and (min-width: 851px)  {
+      margin-top: 80px;
+    }
   }
+  // @media only screen and (min-width: 851px)  {
+  //   margin-top: 80px;
+  // }
 
   .main {
     height: 50px;

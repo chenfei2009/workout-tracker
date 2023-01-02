@@ -36,13 +36,13 @@
       </div>
 
       <!-- 我的 -->
-      <div class="nav-bar-item" v-if="isUserValid" @click="router.push('/profile')">
+      <div class="nav-bar-item" v-if="store.isUserValid" @click="router.push('/profile')">
         <span class="iconfont icon-user"></span>
         <span>我的</span>
       </div>
 
       <!-- 登录 -->
-      <div class="nav-bar-item" v-else @click="openFullscreen('login')">
+      <div class="nav-bar-item" v-else @click="openFullscreen('Login')">
         <span class="iconfont icon-user"></span>
         <span>登录</span>
       </div>
@@ -52,11 +52,12 @@
 
 <script setup>
 import router from '@/router'
+import { useStore } from '@/store/index'
 import { openFullscreen } from '@/utils/fullScreen'
-import { computed } from 'vue'
+// import { computed } from 'vue'
 // import { NotificationManagement } from '@/utils/NotificationManagement'
 
-const isUserValid = computed(() => true)
+const store = useStore()
 
 // const navProfile = () => {
 //   if (router.currentRoute.value.name !== 'profile') router.push({ name: 'profile' })

@@ -15,6 +15,9 @@ export const _getCateWorkouts = async params => request.get('workout/list', { pa
 // 获取用户创建的训练
 export const _getUserWorkouts = async author => request.get(`workout/${author}/created`)
 
+// 获取训练详情
+export const _getWorkoutById = async id => request.get(`workout/details/${id}`)
+
 // 保存训练
 export const _saveWorkout = async dto => request.post('exercise/finished', dto)
 
