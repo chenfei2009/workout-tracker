@@ -1,23 +1,7 @@
 <template>
   <div class="wt-timer">
     <div class="wt-timer--display">
-      <a-progress type="circle" :percent="currentRate" />
-      <!-- <van-circle
-        v-model:current-rate="currentRate"
-        :rate="30"
-        :speed="100"
-        size="220px"
-        :stroke-width="60"
-        layer-color="#eee"
-      /> -->
-      <!-- <tc-progress
-        type="ring"
-        tfcolor="success"
-        :percent="percentage"
-        :ringSize="220"
-        :ringWidth="12"
-        :dark="$store.getters.darkmode"
-      /> -->
+      <a-progress type="circle" :percent="currentRate" :width="200" :showInfo="false" />
       <div class="wt-timer--inputs">
         <input
           type="number"
@@ -46,31 +30,31 @@
         round
         type="danger"
         @click="stop"
-      >Stop</a-button>
+      >清零</a-button>
       <a-button
         v-if="state === 0"
         round
         type="primary"
         @click="start"
-      >Start</a-button>
+      >开始</a-button>
       <a-button
         v-if="state === 1"
         round
         type="default"
         @click="pause"
-      >Pause</a-button>
+      >暂停</a-button>
       <a-button
         v-if="state === 2"
         round
         type="default"
         @click="resume"
-      >Resume</a-button>
+      >继续</a-button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 const minutes = ref('00')
 const seconds = ref('30')
@@ -78,12 +62,19 @@ const state = ref(0) // 0 = stop (not running), 1 = running, 2 = paused
 const currentRate = ref(0)
 let timer = 0
 let goal = 0
+let startTime = 0
 let saved = []
 let remaining = 0
 
-onUnmounted(() => stop())
+const props = defineProps({
+  recTime: Number
+})
 
-function changeSeconds () {
+// input输入框修改
+const changeSeconds = () => {
+  // 修改目标值
+  // goal = new Date().getTime() + (+minutes.value * 60 + +seconds.value) * 1000
+  // console.log('修改目标值', goal)
   const numbers = (seconds.value + '0').split('')
   if (+numbers[0] > 6) {
     seconds.value = +(seconds.value + '').substring(0, 1)
@@ -94,19 +85,22 @@ function changeSeconds () {
   }
 }
 
-function changeMinutes () {
-  // console.log(minutes.value)
+// input输入框修改
+const changeMinutes = () => {
+  // 修改目标值
+  // goal = new Date().getTime() + (+minutes.value * 60 + +seconds.value) * 1000
+  // console.log('修改目标值', goal)
   minutes.value = (minutes.value + '').substring(0, 3)
 }
 
-function start () {
-  saved = [+minutes.value, +seconds.value]
-  goal =
-    new Date().getTime() + (+minutes.value * 60 + +seconds.value) * 1000
-  run()
+const pause = () => {
+  clearInterval(timer)
+  timer = 0
+  state.value = 2
+  remaining = goal - new Date().getTime()
 }
 
-function stop () {
+const stop = () => {
   minutes.value = saved[0]
   seconds.value = saved[1]
   pause()
@@ -117,19 +111,7 @@ function stop () {
   currentRate.value = 100
 }
 
-function pause () {
-  clearInterval(timer)
-  timer = 0
-  state.value = 2
-  remaining = goal - new Date().getTime()
-}
-
-function resume () {
-  goal = new Date().getTime() + remaining
-  run()
-}
-
-function run () {
+const run = () => {
   state.value = 1
   timer = setInterval(() => {
     const remaining = new Date().getTime() - goal
@@ -142,11 +124,36 @@ function run () {
       if (seconds.value <= 9) seconds.value = '0' + seconds.value
       if (minutes.value <= 9) minutes.value = '0' + minutes.value
     } else {
-      this.stop()
+      stop()
     }
   }, 10)
 }
 
+const start = () => {
+  saved = [+minutes.value, +seconds.value]
+  startTime = new Date().getTime()
+  goal = new Date().getTime() + (+minutes.value * 60 + +seconds.value) * 1000
+  run()
+}
+
+const resume = () => {
+  goal = new Date().getTime() + remaining
+  run()
+}
+
+onUnmounted(() => stop())
+
+onMounted(() => {
+  currentRate.value = 100
+  goal = props.recTime
+  if (goal < 60) seconds.value = goal
+  else minutes.value = Math.floor(goal / 60)
+})
+
+// const remaining = minutes.value * 60 + seconds.value
+const timeStat = computed(() => Math.floor((new Date().getTime() - startTime) / 1000))
+
+defineExpose({timeStat})
 </script>
 
 <style lang="less" scoped>
@@ -160,7 +167,7 @@ function run () {
     position: relative;
     .wt-timer--inputs {
       position: absolute;
-      top: 50%;
+      top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
       display: flex;
@@ -196,14 +203,12 @@ function run () {
     }
   }
   .wt-timer--buttons {
+    position: absolute;
+    bottom: 20%;
     margin-top: 10px;
-    width: 220px;
+    width: 100px;
     display: flex;
-    justify-content: space-between;
-    .van-button {
-      width: 105px;
-      height: 30px;
-    }
+    justify-content: center;
   }
 }
 </style>

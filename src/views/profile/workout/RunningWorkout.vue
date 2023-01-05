@@ -20,7 +20,7 @@
     </div>
 
     <div content max-width v-if="dataLoaded">
-      <div class="timer-wrapper">
+      <div class="timer-wrapper total-wrapper">
         <div class="tag">总用时</div>
         <transition-group class="timer" name="timer" tag="ul">
           <li
@@ -33,7 +33,7 @@
 
       <WTTransition>
         <div :key="index" class="sets-reps">
-          <div class="timer-wrapper ex">
+          <div v-if="type === 'gym'" class="timer-wrapper ex">
             <div class="tag">当前动作用时</div>
             <transition-group class="timer" name="timer" tag="ul">
               <li v-for="(t, i) in timeEx" :key="t + '_' + i" :sep="t === ':'">
@@ -41,11 +41,39 @@
               </li>
             </transition-group>
           </div>
-          <div class="info">
-            <span>Tips: 推荐组数 {{state.exercises[index].sets}}</span>
-            <span> 推荐次数 {{state.exercises[index].reps}}</span>
-          </div>
-          <WTRunningTable ref="tableRef" :type="type"/>
+        </div>
+      </WTTransition>
+
+      <WTTransition>
+        <div :key="index" class="sets-reps">
+          <!-- <div v-if="type === 'gym'" class="timer-wrapper ex">
+            <div class="tag">当前动作用时</div>
+            <transition-group class="timer" name="timer" tag="ul">
+              <li v-for="(t, i) in timeEx" :key="t + '_' + i" :sep="t === ':'">
+                {{ t }}
+              </li>
+            </transition-group>
+          </div> -->
+          <template v-if="type === 'gym'">
+            <div>{{volume}}</div>
+            <WTGymForm ref="tableRef" :type="type" />
+          </template>
+          <template v-else>
+            <a-tabs v-model:activeKey="activeName">
+              <div class="tip">目标时长：{{state.workout.times[index]}}秒</div>
+              <a-tab-pane tab="倒计时" key="timer">
+                <WTTimer :recTime="state.workout.times[index] - 0" ref="timerRef"/>
+              </a-tab-pane>
+              <a-tab-pane tab="秒表" key="stopwatch">
+                <WTStopwatch ref="stopwatchRef" />
+              </a-tab-pane>
+            </a-tabs>
+          </template>
+          <!-- <WTRunningTable
+            ref="tableRef"
+            :type="type"
+            :recTime="state.workout.times[index] - 0"
+          /> -->
         </div>
       </WTTransition>
 
@@ -87,14 +115,18 @@
 import { reactive, ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import WTTransition from '@/components/WTTransition.vue'
 import WTBanner from '@/components/WTBanner.vue'
-import WTRunningTable from '@/components/forms/WTRunningTable.vue'
+// import WTRunningTable from '@/components/forms/WTRunningTable.vue'
+import WTGymForm from '@/components/forms/WTGymForm.vue'
+import WTStopwatch from '@/components/WTStopwatch.vue'
+import WTTimer from '@/components/WTTimer.vue'
 import { aMinute, anHour, aSecond } from '@/utils/constants'
 import { closeFullscreen } from '@/utils/fullScreen'
-import { RunningWorkout } from '@/utils/WorkoutManager'
+import { WorkoutManager } from '@/utils/WorkoutManager'
 
 const startTime = ref(0)
 
 const state = reactive({
+  workout: null,
   exercises: [],
   stats: []
 })
@@ -105,6 +137,19 @@ const index = ref(0)
 const time = ref([0, 0, ':', 0, 0, ':', 0, 0])
 const timeEx = ref([0, 0, ':', 0, 0, ':', 0, 0])
 const timer = ref(0)
+
+const volume = computed(() => {
+  if(state.workout.reps[index.value]) {
+    // console.log(state.workout.reps)
+    const reps = state.workout.reps[index.value].replace(/,/g, '次 ')
+    // const reps = state.workout.reps.reduce((prev, cur) => {
+    //   return prev + cur + '次 '
+    // }, '')
+    // return `推荐容量：${state.workout.reps.length}组 X ${state.workout.reps[index.value]}次`
+    return `推荐容量：${state.workout.reps.length}组 ${reps}次`
+  }
+  return null
+})
 
 const dataLoaded = computed(() => {
   return ( // true
@@ -118,11 +163,17 @@ const dataLoaded = computed(() => {
 
 // 'gym' | 'distance' | 'time'
 const type = computed(() => {
-  const { reps, time } = state.exercises[index.value]
-  if (reps) return 'gym'
-  if (time) return 'time'
-  return 'distance'
+  const { reps } = state.workout
+  if (reps[index.value]) return 'gym'
+  return 'time'
 })
+
+// time 类型数据
+const activeName = ref('timer')
+const timerRef = ref()
+const stopwatchRef = ref()
+
+
 
 // 监听 index 的变化
 watch(
@@ -132,12 +183,13 @@ watch(
 )
 
 onMounted(() => {
-  if (!RunningWorkout.hasActiveWorkout()) {
+  if (!WorkoutManager.hasActiveWorkout()) {
     closeFullscreen('Workouts')
   }
-  state.exercises = RunningWorkout.getExercises()
-  startTime.value = RunningWorkout.getStartTime()
-  state.stats = RunningWorkout.getStats()
+  state.workout = WorkoutManager.getWorkout()
+  state.exercises = WorkoutManager.getExercises()
+  startTime.value = WorkoutManager.getStartTime()
+  state.stats = WorkoutManager.getStats()
   updateTime()
   timer.value = setInterval(updateTime, 1000)
   indexChanged(0, undefined)
@@ -191,13 +243,13 @@ function indexChanged (to, from) {
     console.log('reset statFrom', statFrom.duration)
   }
 
-  RunningWorkout.saveStats(state.stats)
+  WorkoutManager.saveStats(state.stats)
 
   updateTime()
 }
 
 /* 缓存训练数据 */
-function setWeightReps () {
+const setWeightReps = () => {
   // 保存成数组？ 本地存储后丢失 exercise 属性
   // 转换成对象
   // const stats = Object.assign({}, tableRef.value.dataSource.filter(x => x.isDone))
@@ -212,62 +264,72 @@ function setWeightReps () {
   const dataSource = tableRef.value.dataSource.filter(x => x.reps > 0 && x.isDone)
   state.stats[index.value].reps = dataSource.map(x => x.reps)
   state.stats[index.value].weights = dataSource.map(x => x.weight)
-  RunningWorkout.saveStats(state.stats)
+  WorkoutManager.saveStats(state.stats)
 }
 
 /* 缓存时间数据 */
-// function setTime () {
-//   if (exTime.value && exTimeUnit.value && exTimeUnit.value.length > 0) {
-//     switch (exTimeUnit.value) {
-//       case 'Hours':
-//         exTime.value *= anHour
-//         break
-//       case 'Minutes':
-//         exTime.value *= aMinute
-//         break
-//       default:
-//         exTime.value *= aSecond
-//         break
-//     }
-//     if (exTime.value > 0) {
-//       state.stats[index.value].time = exTime
-//       WorkoutManagement.saveStats(state.stats)
-//     }
-//     exTime.value = 0
-//   }
-// }
+const setTime = () => {
+  if (activeName.value === 'timer') {
+    console.log('缓存timer数据', timerRef.value.timeStat)
+  } else {
+    console.log('缓存stopwatch数据', stopwatchRef.value.timeStat)
+  }
+  state.stats[index.value].time = (activeName.value === 'timer' ? timerRef.value.timeStat : stopwatchRef.value.timeStat)
+  WorkoutManager.saveStats(state.stats)
+  //   if (exTime.value && exTimeUnit.value && exTimeUnit.value.length > 0) {
+  //     switch (exTimeUnit.value) {
+  //       case 'Hours':
+  //         exTime.value *= anHour
+  //         break
+  //       case 'Minutes':
+  //         exTime.value *= aMinute
+  //         break
+  //       default:
+  //         exTime.value *= aSecond
+  //         break
+  //     }
+  //     if (exTime.value > 0) {
+  //       state.stats[index.value].time = exTime
+  //       WorkoutManagement.saveStats(state.stats)
+  //     }
+  //     exTime.value = 0
+  //   }
+  // }
+}
+
 
 /* 切换下一个动作 */
-function next () {
+const next = () => {
   // 保存当前训练记录
-  setWeightReps()
+  type.value === 'gym' ? setWeightReps() : setTime()
   // 切换动作
   index.value = Math.min(state.exercises.length, index.value + 1)
 }
 
 /* 切换上一个动作 */
-function prev () {
+const prev = () => {
   // 保存当前训练记录
-  setWeightReps()
+  type.value === 'gym' ? setWeightReps() : setTime()
   // 切换动作
   index.value = Math.max(0, index.value - 1)
 }
 
 /* 结束训练，不保存数据 */
-function cancel () {
-  RunningWorkout.clearActiveWorkout()
+const cancel = () => {
+  // 清空定时器
+  clearInterval(timer.value)
+  WorkoutManager.clearActiveWorkout()
 }
 
 /* 保存训练，提交数据 */
-function save () {
+const save = () => {
   // 保存当前训练记录
-  setWeightReps()
+  type.value === 'gym' ? setWeightReps() : setTime()
   indexChanged(0, index.value)
   // 清空定时器
   clearInterval(timer.value)
-  RunningWorkout.saveWorkout(state.stats)
+  WorkoutManager.saveWorkout(state.stats)
 }
-
 </script>
 
 <style lang="less" scoped>
@@ -300,9 +362,11 @@ function save () {
   }
 
   .timer-wrapper {
+    // display: flex;
+    opacity: 0.75;
     position: relative;
     padding: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: @border-radius;
     background: @color_dark;
     // @media #{$isDark} {
@@ -318,10 +382,10 @@ function save () {
       justify-content: center;
       align-items: center;
       position: relative;
-      margin-bottom: 5px;
+      margin-bottom: 0;
       li {
         font-weight: 900;
-        font-size: 2.6em;
+        font-size: 2rem; // 2.6em;
         text-align: center;
         width: 28px;
         &:nth-child(3n) {
@@ -337,6 +401,7 @@ function save () {
       width: fit-content;
       padding: 5px 10px 5px 100px;
       margin-left: auto;
+      border-radius: @border-radius;
       .timer {
         li {
           font-size: 18px;
@@ -347,6 +412,14 @@ function save () {
         }
       }
     }
+  }
+
+  .total-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-radius: 0;
   }
 
   .action-wrapper {
@@ -388,6 +461,12 @@ function save () {
       grid-gap: 0;
     }
   }
+
+  .tip {
+    position: absolute;
+    top: 0;
+    right: 12px;
+  }
 }
 
 .timer-enter-active {
@@ -400,5 +479,15 @@ function save () {
 .timer-enter {
   opacity: 0;
   transform: translateY(-10px) scale(0.7);
+}
+
+:deep(.ant-tabs) {
+  // margin-top: -12px;
+  .ant-tabs-nav-wrap {
+    margin-left: -22px;
+  }
+  .ant-tabs-tab {
+    padding-top: 0;
+  }
 }
 </style>

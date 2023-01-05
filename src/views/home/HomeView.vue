@@ -3,9 +3,7 @@
     <WTBanner :title="running" :subTitle="subTitle">
       <template v-slot:media>
         <video playsinline autoplay="autoplay" loop muted>
-          <source
-            src="https://assets.mixkit.co/videos/preview/mixkit-runner-does-stretch-routine-with-city-bridge-in-background-15801-small.mp4"
-          />
+          <source :src="HOME_BG" />
         </video>
       </template>
       <router-link :to="{name: 'Workouts'}">发现更多训练</router-link>
@@ -32,6 +30,7 @@ import { useStore } from '@/store/index'
 import WTButton from '@/components/WTButton.vue'
 import WTTrainingPlan from '@/components/training/WTTrainingPlan.vue'
 import WTBanner from '@/components/WTBanner.vue'
+import { HOME_BG } from '@/utils/constants'
 
 const store = useStore()
 const running = computed(() => (store.runningWorkout || '腹肌撕裂者初级'))
