@@ -1,5 +1,5 @@
 <template>
-  <ul v-if="type === 'gym'">
+  <ul>
     <li v-for="(item, index) in dataSource" :key="index" :class="{'active': item.isDone}">
       <div class="list-item index">第{{index + 1}}组</div>
       <!-- 重量 weight -->
@@ -17,47 +17,16 @@
       <!-- <div class="rest">组间休息</div> -->
     </li>
   </ul>
-
-  <ul v-else>
-    <a-tabs v-model:activeKey="activeName">
-      <div class="tip">目标时长：{{recTime}}秒</div>
-      <a-tab-pane tab="倒计时" key="timer">
-        <WTTimer :recTime="recTime" />
-      </a-tab-pane>
-      <a-tab-pane tab="秒表" key="stopwatch">
-        <WTStopwatch />
-      </a-tab-pane>
-    </a-tabs>
-  </ul>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import WTStopwatch from '../WTStopwatch.vue'
-import WTTimer from '../WTTimer.vue'
-
-defineProps({
-  type: {
-    type: String,
-    default: 'gym'
-  },
-  recTime: Number
-})
-
-const activeName = ref('timer')
 
 const dataSource = ref([
   {
     weight: null,
     unit: 'kg',
     reps: null,
-    time: null,
-    isDone: false
-  }
-])
-
-const timerSource = ref([
-  {
     time: null,
     isDone: false
   }
@@ -130,21 +99,6 @@ ul {
     .list-item {
       background-color: rgb(200, 200, 200);
     }
-  }
-  .tip {
-    position: absolute;
-    top: 0;
-    right: 12px;
-  }
-}
-
-:deep(.ant-tabs) {
-  // margin-top: -12px;
-  .ant-tabs-nav-wrap {
-    margin-left: -22px;
-  }
-  .ant-tabs-tab {
-    padding-top: 0;
   }
 }
 </style>

@@ -34,7 +34,7 @@ export function closeFullscreen (fallback, replaceQuery = null) {
   // const key = router.currentRoute.value.name || ''
   const store = useStore()
   // const storedRoute = { key: key, route: null }
-  const storedRoute = store.storeRoute.route
+  const storedRoute = store.storeRoute?.route
 
   // store.commit('storeRoute', { key: key, route: null })
 

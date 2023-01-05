@@ -9,32 +9,32 @@
         round
         type="danger"
         @click="stop"
-      >Stop</a-button>
+      >清零</a-button>
       <a-button
         v-if="state === 0"
         round
         type="primary"
         @click="start"
-      >Start</a-button>
+      >开始</a-button>
       <a-button
         v-if="state === 1"
         round
         type="default"
         @click="pause"
-      >Pause</a-button>
+      >暂停</a-button>
       <a-button
         v-if="state === 2"
         round
         type="default"
         @click="resume"
-      >Resume</a-button>
+      >继续</a-button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { anHour, aMinute, aSecond } from '@/utils/constants'
-import { onUnmounted, ref } from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 
 const state = ref(0) // 0 = stop (not running), 1 = running, 2 = paused
 const timestamp = ref(0)
@@ -45,31 +45,8 @@ let stopwatch = null
 
 onUnmounted(() => stop())
 
-function start () {
-  timestamp.value = new Date().getTime()
-  run()
-}
 
-function stop () {
-  pause()
-  state.value = 0
-  display.value = '00:00,00'
-  previousTime.value = 0
-}
-
-function pause () {
-  clearInterval(stopwatch)
-  stopwatch = null
-  state.value = 2
-  previousTime.value = new Date().getTime() - timestamp.value
-}
-
-function resume () {
-  timestamp.value = new Date().getTime() - previousTime.value
-  run()
-}
-
-function run () {
+const run = () => {
   state.value = 1
   stopwatch = setInterval(() => {
     const now = new Date().getTime()
@@ -91,6 +68,33 @@ function run () {
     display.value = displayTemp
   }, 10)
 }
+
+const start = () => {
+  timestamp.value = new Date().getTime()
+  run()
+}
+
+const pause = () => {
+  clearInterval(stopwatch)
+  stopwatch = null
+  state.value = 2
+  previousTime.value = new Date().getTime() - timestamp.value
+}
+
+const stop = () => {
+  pause()
+  state.value = 0
+  display.value = '00:00,00'
+  previousTime.value = 0
+}
+
+const resume = () => {
+  timestamp.value = new Date().getTime() - previousTime.value
+  run()
+}
+
+const timeStat = computed(() => Math.floor((new Date().getTime() - timestamp.value) / 1000))
+defineExpose({timeStat})
 </script>
 
 <style lang="less" scoped>

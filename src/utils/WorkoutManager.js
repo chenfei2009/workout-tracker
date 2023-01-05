@@ -1,59 +1,28 @@
-import { useStore } from '@/store/index'
-// import { FinishExerciseDTO } from './dtos';
 import { closeFullscreen, openFullscreen } from './fullScreen'
-import { _getWorkouts, _saveWorkout } from '@/api/workout'
+import { _saveWorkout } from '@/api/workout'
 import { UserManager } from '@/utils/UserManager'
-
-/**
- * 管理官方训练数据
- */
-export class WorkoutManager {
-  static getWorkout (id) {
-    return (this.getWorkouts() || []).filter(x => x._id === id)[0] || null
-  }
-
-  static getWorkouts () {
-    const store = useStore()
-    console.log('get public from store', store.workouts)
-    return store.workouts
-  }
-
-  static setWorkouts (workouts) {
-    const store = useStore()
-    store.setWorkouts(workouts)
-  }
-
-  static async loadWorkouts () {
-    // if (!this.getWorkouts() && this.getUser())
-    if (!this.getWorkouts()) {
-      const { data } = await _getWorkouts()
-      this.setWorkouts(data.data)
-    }
-  }
-}
 
 /**
  * 管理训练中数据
  */
-export class RunningWorkout {
+export class WorkoutManager {
   static lsStats = 'running-workout-st' // Local_Storage_Stats
   static lsExerc = 'running-workout-ex' // Local_Storage_Exercise
-  static lsWId = 'running-workout-id' // Local_Storage_Workout_Id
+  static lsWork = 'running-workout' // Local_Storage_Workout
   static lsStartTS = 'running-workout-ts' // Local_Storage_Start_Time_Str
 
-  static startWorkout (exercises, workoutId = null) {
+  static startWorkout (exercises, workout) {
     // 判断是否登录
     if (!UserManager.getUserId()) return openFullscreen('login')
     // 判断是否有 exercise
     if (!exercises || exercises.length === 0) return console.error('no exercise')
-    // 判断是否有 workoutId
-    // 没有workoutId
-    if (workoutId) workoutId = -1
-    // 有workoutId
+    // 判断是否有 workout
+    if (!workout) return console.error('no workout')
     // 数据保存到本地缓存
     localStorage.setItem(this.lsStartTS, new Date().getTime().toString())
     localStorage.setItem(this.lsExerc, JSON.stringify(exercises))
-    localStorage.setItem(this.lsWId, JSON.stringify(workoutId))
+    const { _id, author, title, reps, times } = workout
+    localStorage.setItem(this.lsWork, JSON.stringify({ _id, author, title, reps, times }))
     this.prepareStats(exercises)
     openFullscreen('RunningWorkout')
   }
@@ -66,7 +35,6 @@ export class RunningWorkout {
         duration: 0,
         reps: [],
         weights: [],
-        distance: '',
         time: -1
       }
     })
@@ -107,14 +75,19 @@ export class RunningWorkout {
     return JSON.parse(localStorage.getItem(this.lsStats) || '[]')
   }
 
+  static getWorkout () {
+    return JSON.parse(localStorage.getItem(this.lsWork) || '{}')
+  }
+
   static getExercises () {
     return JSON.parse(localStorage.getItem(this.lsExerc) || '[]')
   }
 
   static saveWorkout (stats) {
-    console.log(stats)
+    // console.log(stats)
     const dto = stats
       .map(x => {
+        console.log(x)
         const d = {
           duration: x.duration,
           exerciseId: x.exerciseId,
@@ -123,8 +96,6 @@ export class RunningWorkout {
         if (x.reps.length > 0) {
           d.setsReps = x.reps
           d.setsWeights = x.weights
-        } else if (x.distance.length > 0) {
-          d.distances = [x.distance]
         } else if (x.time > 0) {
           d.times = [x.time]
         } else {
@@ -135,6 +106,7 @@ export class RunningWorkout {
       .filter(x => !!x)
 
     // 提交数据到后台
+    console.log('提交数据到后台', dto)
     _saveWorkout(dto)
     // 清除当前活动数据
     this.clearActiveWorkout()

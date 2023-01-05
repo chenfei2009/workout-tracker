@@ -50,7 +50,7 @@ import {
   closeFullscreen
   // formatTimeForMessage
 } from '@/utils/fullScreen'
-import { RunningWorkout } from '@/utils/WorkoutManager'
+import { WorkoutManager } from '@/utils/WorkoutManager'
 import { _subWorkout } from '@/api/workout'
 
 const isMark = ref(false)
@@ -85,7 +85,7 @@ onMounted(() => {
 
 const startWorkout = () => {
   if (!state.workout) return
-  RunningWorkout.startWorkout(state.workout.exercises, state.workout._id)
+  WorkoutManager.startWorkout(state.workout.exercises, state.workout)
 }
 
 const markWorkout = () => _subWorkout(state.workout._id)
@@ -98,6 +98,7 @@ const markWorkout = () => _subWorkout(state.workout._id)
 
   [content] {
     // padding-top: 0;
+    padding-bottom: 80px;
     .grid {
       display: grid;
       min-width: 150px;

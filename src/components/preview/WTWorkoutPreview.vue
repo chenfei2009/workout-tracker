@@ -34,7 +34,7 @@
 <script setup>
 import { shallowRef, computed, defineAsyncComponent } from 'vue'
 import { openFullscreen } from '@/utils/fullScreen'
-import { RunningWorkout } from '@/utils/WorkoutManager'
+import { WorkoutManager } from '@/utils/WorkoutManager'
 // import WTPreviewSmall from './WTPreviewSmall.vue'
 // import WTPreviewLarge from './WTPreviewLarge.vue'
 // import WTWorkoutThumbnail from './WTWorkoutThumbnail.vue'
@@ -81,7 +81,7 @@ const handleClick = () => {
 
 const startWorkout = () => {
   if (!props.workout) return
-  RunningWorkout.startWorkout(props.workout.exercises)
+  WorkoutManager.startWorkout(props.workout.exercises, props.workout)
 }
 
 const getIntensity = intensity => {

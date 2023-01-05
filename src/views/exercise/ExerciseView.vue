@@ -55,7 +55,7 @@ import { useStore } from '@/store'
 import request from '@/utils/request'
 import PageHeader from '@/components/common/PageHeader.vue'
 import WTExercisePreview from '@/components/preview/WTExercisePreview.vue'
-import { RunningWorkout } from '@/utils/WorkoutManager'
+import { WorkoutManager } from '@/utils/WorkoutManager'
 
 const selected = ref(-1)
 const isLoading = ref(false)
@@ -136,7 +136,7 @@ function submit () {
 
 const startWorkout = ex => {
   if (!ex) return
-  RunningWorkout.startWorkout([ex], null)
+  WorkoutManager.startWorkout([ex], null)
 }
 </script>
 
